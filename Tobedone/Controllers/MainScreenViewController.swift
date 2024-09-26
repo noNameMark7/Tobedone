@@ -7,15 +7,14 @@ class MainScreenViewController: UIViewController {
     
     // MARK: - Properties
     
-    let context = (
-        UIApplication.shared.delegate as! AppDelegate
-    ).persistentContainer.viewContext
+    let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
     
     private var models = [ToDoListItem]()
     
     private let tableView: UITableView = {
         let tableView = UITableView()
         tableView.translatesAutoresizingMaskIntoConstraints = false
+        tableView.separatorStyle = .none
         return tableView
     }()
 
@@ -54,7 +53,7 @@ extension MainScreenViewController {
 }
 
 
-// MARK: - UITableView & UINavigationController
+// MARK: - UITableView, UINavigationController
 
 extension MainScreenViewController {
     
@@ -65,10 +64,10 @@ extension MainScreenViewController {
         )
         tableView.dataSource = self
         tableView.delegate = self
-        tableView.separatorStyle = .none
-        tableView.rowHeight = UITableView.automaticDimension
+        // Dynamic cell size
         tableView.estimatedRowHeight = 90
-        // MARK: - New movable code
+        tableView.rowHeight = UITableView.automaticDimension
+        // Movable code
         tableView.dragInteractionEnabled = true
         tableView.dragDelegate = self
         tableView.dropDelegate = self
@@ -91,7 +90,7 @@ extension MainScreenViewController {
         navigationItem.rightBarButtonItem?.tintColor = UIColor(named: "addButtonColorSet")
         
         navigationItem.leftBarButtonItem = UIBarButtonItem(
-            image: UIImage(systemName: "gear"),
+            image: UIImage(systemName: "info"),
             style: .plain,
             target: self,
             action: #selector(didTappedSettingsButton)
@@ -144,10 +143,17 @@ extension MainScreenViewController {
 }
 
 
-// MARK: - UITableViewDataSource & UITableViewDelegate
+// MARK: - UITableViewDataSource, UITableViewDelegate
 
 extension MainScreenViewController: UITableViewDataSource, UITableViewDelegate {
     
+    func numberOfSections(in tableView: UITableView) -> Int {
+        2
+    }
+    
+    func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+        section == 0 ? "Active" : "Completed"
+    }
     func tableView(
         _ tableView: UITableView,
         numberOfRowsInSection section: Int
@@ -199,12 +205,12 @@ extension MainScreenViewController: UITableViewDataSource, UITableViewDelegate {
             )
             
             alert.addTextField { textField in
-                textField.text = item.name /// Existing name
+                textField.text = item.name // Existing name
                 textField.placeholder = "Enter new task"
             }
             
             alert.addTextField { textField in
-                textField.text = item.note /// Enter note
+                textField.text = item.note // Enter note
                 textField.placeholder = "Add a note (optional)"
             }
             
@@ -246,7 +252,7 @@ extension MainScreenViewController: UITableViewDataSource, UITableViewDelegate {
         }
         
         let done = UIAlertAction(
-            title: "Mark as done",
+            title: "Mark as completed",
             style: .default
         )
         
@@ -319,7 +325,7 @@ extension MainScreenViewController: UITableViewDataSource, UITableViewDelegate {
 }
 
 
-// MARK: - UITableViewDragDelegate & UITableViewDropDelegate
+// MARK: - UITableViewDragDelegate, UITableViewDropDelegate
 
 extension MainScreenViewController: UITableViewDragDelegate, UITableViewDropDelegate {
     

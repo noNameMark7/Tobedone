@@ -10,6 +10,7 @@
 		4D2A04D92C87BB7C00C0F9A6 /* ToDoListItem+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D2A04D72C87BB7C00C0F9A6 /* ToDoListItem+CoreDataClass.swift */; };
 		4D2A04DA2C87BB7C00C0F9A6 /* ToDoListItem+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D2A04D82C87BB7C00C0F9A6 /* ToDoListItem+CoreDataProperties.swift */; };
 		4D39F4942C8B896000AB69DE /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D39F4932C8B896000AB69DE /* SettingsViewController.swift */; };
+		4D3A1D3A2CA4AB0600D0958F /* SettingsTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D3A1D392CA4AB0500D0958F /* SettingsTableViewCell.swift */; };
 		4D961AE22C7BCB9900AED7AF /* CustomTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D961AE12C7BCB9900AED7AF /* CustomTableViewCell.swift */; };
 		4DA60ACD2C82758800CDB41A /* FontManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DA60ACC2C82758800CDB41A /* FontManager.swift */; };
 		4DCF44C22BC1818800666EB9 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DCF44C12BC1818800666EB9 /* AppDelegate.swift */; };
@@ -24,6 +25,7 @@
 		4D2A04D72C87BB7C00C0F9A6 /* ToDoListItem+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ToDoListItem+CoreDataClass.swift"; sourceTree = "<group>"; };
 		4D2A04D82C87BB7C00C0F9A6 /* ToDoListItem+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ToDoListItem+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		4D39F4932C8B896000AB69DE /* SettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
+		4D3A1D392CA4AB0500D0958F /* SettingsTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsTableViewCell.swift; sourceTree = "<group>"; };
 		4D961AE12C7BCB9900AED7AF /* CustomTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomTableViewCell.swift; sourceTree = "<group>"; };
 		4DA60ACC2C82758800CDB41A /* FontManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FontManager.swift; sourceTree = "<group>"; };
 		4DCF44BE2BC1818800666EB9 /* Tobedone.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Tobedone.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -68,6 +70,7 @@
 			isa = PBXGroup;
 			children = (
 				4D961AE12C7BCB9900AED7AF /* CustomTableViewCell.swift */,
+				4D3A1D392CA4AB0500D0958F /* SettingsTableViewCell.swift */,
 			);
 			path = "Custom Cell";
 			sourceTree = "<group>";
@@ -208,6 +211,7 @@
 				4D961AE22C7BCB9900AED7AF /* CustomTableViewCell.swift in Sources */,
 				4DA60ACD2C82758800CDB41A /* FontManager.swift in Sources */,
 				4DCF44CC2BC1818800666EB9 /* Tobedone.xcdatamodeld in Sources */,
+				4D3A1D3A2CA4AB0600D0958F /* SettingsTableViewCell.swift in Sources */,
 				4D39F4942C8B896000AB69DE /* SettingsViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

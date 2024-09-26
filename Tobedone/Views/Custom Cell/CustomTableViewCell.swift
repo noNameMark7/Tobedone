@@ -8,10 +8,8 @@ class CustomTableViewCell: UITableViewCell {
     
     private let containerView: UIView = {
         let view = UIView()
-        view.backgroundColor = #colorLiteral(red: 0.9921568627, green: 0.9803921569, blue: 0.4352941176, alpha: 1)
-        view.layer.cornerRadius = 10
-        view.layer.borderWidth = 0.5
-        view.layer.borderColor = UIColor.black.cgColor
+        view.layer.cornerRadius = 7
+        view.clipsToBounds = true
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
@@ -19,6 +17,7 @@ class CustomTableViewCell: UITableViewCell {
     private let taskLabel: UILabel = {
         let label = UILabel()
         label.font = FontManager.shared.labelFont(withSize: 15)
+        label.textColor = .label
         label.numberOfLines = 0
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
@@ -52,12 +51,17 @@ class CustomTableViewCell: UITableViewCell {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+    
+    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+        super.traitCollectionDidChange(previousTraitCollection)
+        updateAppearance(for: traitCollection)
+    }
 }
 
 
 // MARK: - Initial Setup
 
-extension CustomTableViewCell {
+private extension CustomTableViewCell {
     
     func initialSetup() {
         configureUI()
@@ -89,6 +93,16 @@ extension CustomTableViewCell {
             isPriorityImageView.heightAnchor.constraint(equalToConstant: 15.9),
             isPriorityImageView.widthAnchor.constraint(equalToConstant: 24)
         ])
+        
+        updateAppearance(for: traitCollection)
+    }
+    
+    func updateAppearance(for traitCollection: UITraitCollection) {
+        if traitCollection.userInterfaceStyle == .dark {
+            containerView.backgroundColor = #colorLiteral(red: 0.1298420429, green: 0.1298461258, blue: 0.1298439503, alpha: 1)
+        } else {
+            containerView.backgroundColor = #colorLiteral(red: 0.921431005, green: 0.9214526415, blue: 0.9214410186, alpha: 1)
+        }
     }
 }
 
