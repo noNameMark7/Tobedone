@@ -7,9 +7,10 @@ class MainScreenViewController: UIViewController {
     
     // MARK: - Properties
     
-    let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
+    private let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
     
-    private var models = [ToDoListItem]()
+    private var activeTasks = [ToDoListItem]()
+    private var completedTasks = [ToDoListItem]()
     
     private let tableView: UITableView = {
         let tableView = UITableView()
@@ -118,7 +119,7 @@ extension MainScreenViewController {
                   !text.isEmpty else {
                 return
             }
-            let newPosition: Int16 = Int16(strongSelf.models.count)
+            let newPosition: Int16 = Int16(strongSelf.activeTasks.count)
             strongSelf.createItem(name: text, position: newPosition)
         }
         
@@ -152,20 +153,20 @@ extension MainScreenViewController: UITableViewDataSource, UITableViewDelegate {
     }
     
     func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        section == 0 ? "Active" : "Completed"
+        section == 0 ? "Active tasks" : "Completed tasks"
     }
     func tableView(
         _ tableView: UITableView,
         numberOfRowsInSection section: Int
     ) -> Int {
-        models.count
+        section == 0 ? activeTasks.count : completedTasks.count
     }
     
     func tableView(
         _ tableView: UITableView,
         cellForRowAt indexPath: IndexPath
     ) -> UITableViewCell {
-        let model = models[indexPath.row]
+        let item = (indexPath.section == 0) ? activeTasks[indexPath.row] : completedTasks[indexPath.row]
         
         guard let cell = tableView.dequeueReusableCell(
             withIdentifier: CustomTableViewCell.identifier,
@@ -173,7 +174,7 @@ extension MainScreenViewController: UITableViewDataSource, UITableViewDelegate {
         ) as? CustomTableViewCell else {
             return UITableViewCell()
         }
-        cell.configurationOfValuesWith(model)
+        cell.configurationOfValuesWith(item)
         return cell
     }
     
@@ -183,8 +184,9 @@ extension MainScreenViewController: UITableViewDataSource, UITableViewDelegate {
     ) {
         tableView.deselectRow(at: indexPath, animated: true)
         
-        let item = models[indexPath.row]
+        let item = (indexPath.section == 0) ? activeTasks[indexPath.row] : completedTasks[indexPath.row]
         let priorityTitle = item.isPriority ? "Remove priority" : "Mark as priority"
+        let completedTitle = item.isDone ? "Mark as active" : "Mark as completed"
         
         let sheet = UIAlertController(
             title: "Edit Mode",
@@ -251,11 +253,13 @@ extension MainScreenViewController: UITableViewDataSource, UITableViewDelegate {
             strongSelf.markItemAsPriority(at: indexPath)
         }
         
-        let done = UIAlertAction(
-            title: "Mark as completed",
+        let completed = UIAlertAction(
+            title: completedTitle,
             style: .default
-        )
-        
+        ) { [weak self] _ in
+            self?.toggleTaskCompletion(item: item)
+        }
+    
         let delete = UIAlertAction(
             title: "Delete",
             style: .destructive
@@ -293,7 +297,7 @@ extension MainScreenViewController: UITableViewDataSource, UITableViewDelegate {
         
         sheet.addAction(edit)
         sheet.addAction(priority)
-        sheet.addAction(done)
+        sheet.addAction(completed)
         sheet.addAction(delete)
         sheet.addAction(cancel)
     
@@ -305,23 +309,61 @@ extension MainScreenViewController: UITableViewDataSource, UITableViewDelegate {
         moveRowAt sourceIndexPath: IndexPath,
         to destinationIndexPath: IndexPath
     ) {
-        let movedItem = models.remove(at: sourceIndexPath.row)
-        models.insert(movedItem, at: destinationIndexPath.row)
+        let item: ToDoListItem
         
-        // Update the position values for all items
-        for (index, item) in models.enumerated() {
-            item.position = Int16(index)
+        if sourceIndexPath.section == 0 {
+            item = activeTasks.remove(at: sourceIndexPath.row)
+            item.isDone = true // Update for completed tasks
+            completedTasks.insert(item, at: destinationIndexPath.row)
+        } else {
+            item = completedTasks.remove(at: sourceIndexPath.row)
+            item.isDone = false // Update for active tasks
+            activeTasks.insert(item, at: destinationIndexPath.row)
         }
         
-        do {
-            try context.save()
-            getAllItems()
-        } catch {
-            let nserror = error as NSError
-            fatalError("Failed to save reordered items \(nserror), \(nserror.userInfo)")
-        }
+        // Save changes to Core Data
+        saveNewOrderToCoreData()
         tableView.reloadData()
     }
+    
+    
+    
+    // --------------------
+    func tableView(
+        _ tableView: UITableView,
+        editingStyleForRowAt indexPath: IndexPath
+    ) -> UITableViewCell.EditingStyle {
+        .delete
+    }
+    
+    func tableView(
+        _ tableView: UITableView,
+        commit editingStyle: UITableViewCell.EditingStyle,
+        forRowAt indexPath: IndexPath
+    ) {
+        if editingStyle == .delete {
+            
+            let item: ToDoListItem
+            
+            if indexPath.section == 0 {
+                item = activeTasks[indexPath.row]
+                activeTasks.remove(at: indexPath.row)
+            } else {
+                item = completedTasks[indexPath.row]
+                completedTasks.remove(at: indexPath.row)
+            }
+            
+            tableView.beginUpdates()
+            
+            deleteItem(item: item)
+            
+            tableView.deleteRows(at: [indexPath], with: .fade)
+    
+            tableView.endUpdates()
+            tableView.reloadData()
+        }
+    }
+    // --------------------
 }
 
 
@@ -334,7 +376,8 @@ extension MainScreenViewController: UITableViewDragDelegate, UITableViewDropDele
         itemsForBeginning session: UIDragSession,
         at indexPath: IndexPath
     ) -> [UIDragItem] {
-        let item = models[indexPath.row]
+        let item = (indexPath.section == 0) ? activeTasks[indexPath.row] : completedTasks[indexPath.row]
+        
         let itemProvider = NSItemProvider(object: item.name! as NSString)
         let dragItem = UIDragItem(itemProvider: itemProvider)
         dragItem.localObject = item
@@ -370,9 +413,25 @@ extension MainScreenViewController: UITableViewDragDelegate, UITableViewDropDele
         tableView: UITableView
     ) {
         if let item = coordinator.items.first, let sourceIndexPath = item.sourceIndexPath {
+            var movedItem: ToDoListItem
+            
+            // Remove the item from the original section
+            if sourceIndexPath.section == 0 {
+                movedItem = activeTasks.remove(at: sourceIndexPath.row)
+            } else {
+                movedItem = completedTasks.remove(at: sourceIndexPath.row)
+            }
+            
+            // Update the item's status based on the destination section
+            if destinationIndexPath.section == 0 {
+                movedItem.isDone = false // Mark it as active
+                activeTasks.insert(movedItem, at: destinationIndexPath.row)
+            } else {
+                movedItem.isDone = true // Mark it as completed
+                completedTasks.insert(movedItem, at: destinationIndexPath.row)
+            }
+            
             tableView.performBatchUpdates({
-                models.remove(at: sourceIndexPath.row)
-                models.insert(item.dragItem.localObject as! ToDoListItem, at: destinationIndexPath.row)
                 tableView.deleteRows(at: [sourceIndexPath], with: .automatic)
                 tableView.insertRows(at: [destinationIndexPath], with: .automatic)
             }, completion: { _ in
@@ -408,7 +467,11 @@ extension MainScreenViewController {
         fetchRequest.sortDescriptors = [sortDescriptor]
         
         do {
-            models = try context.fetch(fetchRequest)
+            let allTasks = try context.fetch(fetchRequest)
+            
+            activeTasks = allTasks.filter { !$0.isDone }
+            completedTasks = allTasks.filter { $0.isDone }
+            
             DispatchQueue.main.async {
                 self.tableView.reloadData()
             }
@@ -450,7 +513,10 @@ extension MainScreenViewController {
 extension MainScreenViewController {
     
     func saveNewOrderToCoreData() {
-        for (index, item) in models.enumerated() {
+        for (index, item) in activeTasks.enumerated() {
+            item.position = Int16(index)
+        }
+        for (index, item) in completedTasks.enumerated() {
             item.position = Int16(index)
         }
         
@@ -459,12 +525,12 @@ extension MainScreenViewController {
             getAllItems()
         } catch {
             let nserror = error as NSError
-            fatalError("Can not save order \(nserror), \(nserror.userInfo)")
+            fatalError("Cannot save order \(nserror), \(nserror.userInfo)")
         }
     }
     
     func markItemAsPriority(at indexPath: IndexPath) {
-        let item = models[indexPath.row]
+        let item = (indexPath.section == 0) ? activeTasks[indexPath.row] : completedTasks[indexPath.row]
         
         item.isPriority.toggle()
         
@@ -479,6 +545,18 @@ extension MainScreenViewController {
         // Update the UI
         if let cell = tableView.cellForRow(at: indexPath) as? CustomTableViewCell {
             cell.isPriorityImageView.isHidden = !item.isPriority
+        }
+    }
+    
+    func toggleTaskCompletion(item: ToDoListItem) {
+        item.isDone.toggle()
+        
+        do {
+            try context.save()
+            getAllItems()
+        } catch {
+            let nserror = error as NSError
+            fatalError("Failed to toggle task completion \(nserror), \(nserror.userInfo)")
         }
     }
 }

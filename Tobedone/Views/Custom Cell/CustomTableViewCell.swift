@@ -111,9 +111,9 @@ private extension CustomTableViewCell {
 
 extension CustomTableViewCell {
     
-    func configurationOfValuesWith(_ model: ToDoListItem) {
-        taskLabel.text = model.name
-        noteLabel.text = model.note
-        isPriorityImageView.isHidden = !model.isPriority
+    func configurationOfValuesWith(_ item: ToDoListItem) {
+        taskLabel.text = item.name
+        noteLabel.text = item.note
+        isPriorityImageView.isHidden = !item.isPriority
     }
 }
