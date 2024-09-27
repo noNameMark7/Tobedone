@@ -186,7 +186,7 @@ extension MainScreenViewController: UITableViewDataSource, UITableViewDelegate {
         
         let item = (indexPath.section == 0) ? activeTasks[indexPath.row] : completedTasks[indexPath.row]
         let priorityTitle = item.isPriority ? "Remove priority" : "Mark as priority"
-        let completedTitle = item.isDone ? "Mark as active" : "Mark as completed"
+        let completedTitle = item.isDone ? "Return to active" : "Mark as completed"
         
         let sheet = UIAlertController(
             title: "Edit Mode",
@@ -326,9 +326,6 @@ extension MainScreenViewController: UITableViewDataSource, UITableViewDelegate {
         tableView.reloadData()
     }
     
-    
-    
-    // --------------------
     func tableView(
         _ tableView: UITableView,
         editingStyleForRowAt indexPath: IndexPath
@@ -363,7 +360,6 @@ extension MainScreenViewController: UITableViewDataSource, UITableViewDelegate {
             tableView.reloadData()
         }
     }
-    // --------------------
 }
 
 
