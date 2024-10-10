@@ -8,35 +8,35 @@ class CustomTableViewCell: UITableViewCell {
     
     private let containerView: UIView = {
         let view = UIView()
+        view.translatesAutoresizingMaskIntoConstraints = false
         view.layer.cornerRadius = 7
         view.clipsToBounds = true
-        view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
 
     private let taskLabel: UILabel = {
         let label = UILabel()
+        label.translatesAutoresizingMaskIntoConstraints = false
         label.font = FontManager.shared.labelFont(withSize: 15)
         label.textColor = .label
         label.numberOfLines = 0
-        label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
     
     private let noteLabel: UILabel = {
         let label = UILabel()
+        label.translatesAutoresizingMaskIntoConstraints = false
         label.font = FontManager.shared.labelFont(withSize: 12)
         label.textColor = .secondaryLabel
         label.numberOfLines = 0
-        label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
     
     let isPriorityImageView: UIImageView = {
         let imageView = UIImageView()
+        imageView.translatesAutoresizingMaskIntoConstraints = false
         imageView.image = #imageLiteral(resourceName: "Akatsuki Cloud")
         imageView.isHidden = true
-        imageView.translatesAutoresizingMaskIntoConstraints = false
         return imageView
     }()
     

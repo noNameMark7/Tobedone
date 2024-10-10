@@ -92,6 +92,15 @@
 			path = Utils;
 			sourceTree = "<group>";
 		};
+		4DB4F8F62CB1D9BA007A9A67 /* Application */ = {
+			isa = PBXGroup;
+			children = (
+				4DCF44C12BC1818800666EB9 /* AppDelegate.swift */,
+				4DCF44C32BC1818800666EB9 /* SceneDelegate.swift */,
+			);
+			path = Application;
+			sourceTree = "<group>";
+		};
 		4DCF44B52BC1818700666EB9 = {
 			isa = PBXGroup;
 			children = (
@@ -111,26 +120,17 @@
 		4DCF44C02BC1818800666EB9 /* Tobedone */ = {
 			isa = PBXGroup;
 			children = (
+				4DB4F8F62CB1D9BA007A9A67 /* Application */,
+				4D9B56FF2C7BC77500AA4FC3 /* Core Data */,
 				4DA60ACB2C82756300CDB41A /* Utils */,
 				4D961ADF2C7BCB6A00AED7AF /* Views */,
-				4D9B56FF2C7BC77500AA4FC3 /* Core Data */,
 				4D80C1C32BC5AA5C00C07A0F /* Controllers */,
-				4DCF44DD2BC19F1000666EB9 /* Supporting */,
+				4DCF44CD2BC1818B00666EB9 /* Assets.xcassets */,
+				4DCF44CF2BC1818B00666EB9 /* LaunchScreen.storyboard */,
 				4DCF44D22BC1818B00666EB9 /* Info.plist */,
 				4DCF44CA2BC1818800666EB9 /* Tobedone.xcdatamodeld */,
 			);
 			path = Tobedone;
-			sourceTree = "<group>";
-		};
-		4DCF44DD2BC19F1000666EB9 /* Supporting */ = {
-			isa = PBXGroup;
-			children = (
-				4DCF44C12BC1818800666EB9 /* AppDelegate.swift */,
-				4DCF44C32BC1818800666EB9 /* SceneDelegate.swift */,
-				4DCF44CD2BC1818B00666EB9 /* Assets.xcassets */,
-				4DCF44CF2BC1818B00666EB9 /* LaunchScreen.storyboard */,
-			);
-			path = Supporting;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
