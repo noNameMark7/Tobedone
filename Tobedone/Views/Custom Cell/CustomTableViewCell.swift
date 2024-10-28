@@ -9,7 +9,7 @@ class CustomTableViewCell: UITableViewCell {
     private let containerView: UIView = {
         let view = UIView()
         view.translatesAutoresizingMaskIntoConstraints = false
-        view.layer.cornerRadius = 7
+        view.layer.cornerRadius = 9
         view.clipsToBounds = true
         return view
     }()
@@ -17,7 +17,7 @@ class CustomTableViewCell: UITableViewCell {
     private let taskLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.font = FontManager.shared.labelFont(withSize: 15)
+        label.font = FontManager.shared.labelFont(withSize: 15, withWeight: .medium)
         label.textColor = .label
         label.numberOfLines = 0
         return label
@@ -26,7 +26,7 @@ class CustomTableViewCell: UITableViewCell {
     private let noteLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.font = FontManager.shared.labelFont(withSize: 12)
+        label.font = FontManager.shared.labelFont(withSize: 12, withWeight: .regular)
         label.textColor = .secondaryLabel
         label.numberOfLines = 0
         return label
@@ -74,9 +74,9 @@ private extension CustomTableViewCell {
         containerView.addSubview(isPriorityImageView)
         
         NSLayoutConstraint.activate([
-            containerView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 2),
+            containerView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 3),
             containerView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -6),
-            containerView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -2),
+            containerView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -3),
             containerView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 6),
             
             taskLabel.topAnchor.constraint(equalTo: containerView.topAnchor, constant: 7),
@@ -101,7 +101,7 @@ private extension CustomTableViewCell {
         if traitCollection.userInterfaceStyle == .dark {
             containerView.backgroundColor = #colorLiteral(red: 0.1298420429, green: 0.1298461258, blue: 0.1298439503, alpha: 1)
         } else {
-            containerView.backgroundColor = #colorLiteral(red: 0.921431005, green: 0.9214526415, blue: 0.9214410186, alpha: 1)
+            containerView.backgroundColor = #colorLiteral(red: 0.921431005, green: 0.9214526415, blue: 0.9214410186, alpha: 0.5)
         }
     }
 }

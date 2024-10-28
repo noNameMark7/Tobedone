@@ -91,7 +91,7 @@ extension MainScreenViewController {
         navigationItem.rightBarButtonItem?.tintColor = UIColor(named: "addButtonColorSet")
         
         navigationItem.leftBarButtonItem = UIBarButtonItem(
-            image: UIImage(systemName: "info"),
+            image: UIImage(systemName: "info.circle"),
             style: .plain,
             target: self,
             action: #selector(didTappedSettingsButton)
@@ -148,19 +148,31 @@ extension MainScreenViewController {
 
 extension MainScreenViewController: UITableViewDataSource, UITableViewDelegate {
     
+    // MARK: - numberOfSections
+    
     func numberOfSections(in tableView: UITableView) -> Int {
         2
     }
     
-    func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+    // MARK: - titleForHeaderInSection
+    
+    func tableView(
+        _ tableView: UITableView,
+        titleForHeaderInSection section: Int
+    ) -> String? {
         section == 0 ? "Active tasks" : "Completed tasks"
     }
+    
+    // MARK: - numberOfRowsInSection
+    
     func tableView(
         _ tableView: UITableView,
         numberOfRowsInSection section: Int
     ) -> Int {
         section == 0 ? activeTasks.count : completedTasks.count
     }
+    
+    // MARK: - cellForRowAt
     
     func tableView(
         _ tableView: UITableView,
@@ -177,6 +189,8 @@ extension MainScreenViewController: UITableViewDataSource, UITableViewDelegate {
         cell.configurationOfValuesWith(item)
         return cell
     }
+    
+    // MARK: - didSelectRowAt
     
     func tableView(
         _ tableView: UITableView,
@@ -304,27 +318,25 @@ extension MainScreenViewController: UITableViewDataSource, UITableViewDelegate {
         present(sheet, animated: true)
     }
     
+    // MARK: - moveRowAt
+    
     func tableView(
         _ tableView: UITableView,
         moveRowAt sourceIndexPath: IndexPath,
         to destinationIndexPath: IndexPath
     ) {
-        let item: ToDoListItem
-        
-        if sourceIndexPath.section == 0 {
-            item = activeTasks.remove(at: sourceIndexPath.row)
-            item.isDone = true // Update for completed tasks
-            completedTasks.insert(item, at: destinationIndexPath.row)
-        } else {
-            item = completedTasks.remove(at: sourceIndexPath.row)
-            item.isDone = false // Update for active tasks
-            activeTasks.insert(item, at: destinationIndexPath.row)
+        // Prevent moving completed tasks
+        guard sourceIndexPath.section == 0, destinationIndexPath.section == 0 else {
+            tableView.reloadData()
+            return
         }
         
-        // Save changes to Core Data
+        let movedTask = activeTasks.remove(at: sourceIndexPath.row)
+        activeTasks.insert(movedTask, at: destinationIndexPath.row)
         saveNewOrderToCoreData()
-        tableView.reloadData()
     }
+    
+    // MARK: - editingStyleForRowAt
     
     func tableView(
         _ tableView: UITableView,
@@ -332,6 +344,8 @@ extension MainScreenViewController: UITableViewDataSource, UITableViewDelegate {
     ) -> UITableViewCell.EditingStyle {
         .delete
     }
+    
+    // MARK: - forRowAt
     
     func tableView(
         _ tableView: UITableView,
@@ -367,18 +381,23 @@ extension MainScreenViewController: UITableViewDataSource, UITableViewDelegate {
 
 extension MainScreenViewController: UITableViewDragDelegate, UITableViewDropDelegate {
     
+    // MARK: - itemsForBeginning
+    
     func tableView(
         _ tableView: UITableView,
         itemsForBeginning session: UIDragSession,
         at indexPath: IndexPath
     ) -> [UIDragItem] {
-        let item = (indexPath.section == 0) ? activeTasks[indexPath.row] : completedTasks[indexPath.row]
-        
+        // Disable dragging for completed tasks
+        guard indexPath.section == 0 else { return [] }
+        let item = activeTasks[indexPath.row]
         let itemProvider = NSItemProvider(object: item.name! as NSString)
         let dragItem = UIDragItem(itemProvider: itemProvider)
         dragItem.localObject = item
-        return[dragItem]
+        return [dragItem]
     }
+    
+    // MARK: - performDropWith
     
     func tableView(
         _ tableView: UITableView,
@@ -403,38 +422,59 @@ extension MainScreenViewController: UITableViewDragDelegate, UITableViewDropDele
         }
     }
     
+    // MARK: - destinationIndexPath
+    
     func reorderItems(
         coordinator: UITableViewDropCoordinator,
         destinationIndexPath: IndexPath,
         tableView: UITableView
     ) {
-        if let item = coordinator.items.first, let sourceIndexPath = item.sourceIndexPath {
-            var movedItem: ToDoListItem
-            
-            // Remove the item from the original section
-            if sourceIndexPath.section == 0 {
-                movedItem = activeTasks.remove(at: sourceIndexPath.row)
-            } else {
-                movedItem = completedTasks.remove(at: sourceIndexPath.row)
-            }
-            
-            // Update the item's status based on the destination section
-            if destinationIndexPath.section == 0 {
-                movedItem.isDone = false // Mark it as active
-                activeTasks.insert(movedItem, at: destinationIndexPath.row)
-            } else {
-                movedItem.isDone = true // Mark it as completed
-                completedTasks.insert(movedItem, at: destinationIndexPath.row)
-            }
-            
-            tableView.performBatchUpdates({
-                tableView.deleteRows(at: [sourceIndexPath], with: .automatic)
-                tableView.insertRows(at: [destinationIndexPath], with: .automatic)
-            }, completion: { _ in
-                self.saveNewOrderToCoreData()
-            })
-            coordinator.drop(item.dragItem, toRowAt: destinationIndexPath)
+        // Ensure there's an item to be moved and a valid source index path
+        guard let item = coordinator.items.first, let sourceIndexPath = item.sourceIndexPath else { return }
+        
+        // Check if the destination index path is within bounds
+        let destinationSection = destinationIndexPath.section
+        
+        if (destinationSection == 0 && destinationIndexPath.row > activeTasks.count) ||
+            (destinationSection == 1 && destinationIndexPath.row > completedTasks.count) {
+            return
         }
+        
+        var movedItem: ToDoListItem
+        
+        // Remove item from the original section
+        if sourceIndexPath.section == 0 {
+            movedItem = activeTasks.remove(at: sourceIndexPath.row)
+        } else {
+            movedItem = completedTasks.remove(at: sourceIndexPath.row)
+        }
+        
+        // Update item's status based on the destination section
+        movedItem.isDone = (destinationSection == 1)
+        
+        // Insert item in the new section
+        if destinationSection == 0 {
+            activeTasks.insert(movedItem, at: destinationIndexPath.row)
+        } else {
+            completedTasks.insert(movedItem, at: destinationIndexPath.row)
+        }
+        
+        // Adjust positions for each item in the list
+        for (index, item) in activeTasks.enumerated() {
+            item.position = Int16(index)
+        }
+        for (index, item) in completedTasks.enumerated() {
+            item.position = Int16(index)
+        }
+        
+        tableView.performBatchUpdates({
+            tableView.deleteRows(at: [sourceIndexPath], with: .automatic)
+            tableView.insertRows(at: [destinationIndexPath], with: .automatic)
+        }, completion: { _ in
+            self.saveNewOrderToCoreData()
+        })
+        
+        coordinator.drop(item.dragItem, toRowAt: destinationIndexPath)
     }
 }
 
@@ -442,6 +482,8 @@ extension MainScreenViewController: UITableViewDragDelegate, UITableViewDropDele
 // MARK: - Core Data
 
 extension MainScreenViewController {
+    
+    // MARK: - Create
     
     func createItem(name: String, position: Int16) {
         let newItem = ToDoListItem(context: context)
@@ -456,6 +498,8 @@ extension MainScreenViewController {
             fatalError("Can not create item \(nserror), \(nserror.userInfo)")
         }
     }
+    
+    // MARK: - Read
     
     func getAllItems() {
         let fetchRequest: NSFetchRequest<ToDoListItem> = ToDoListItem.fetchRequest()
@@ -477,6 +521,8 @@ extension MainScreenViewController {
         }
     }
 
+    // MARK: - Update
+    
     func updateItem(item: ToDoListItem, newName: String, newNote: String) {
         item.name = newName
         item.note = newNote
@@ -489,6 +535,8 @@ extension MainScreenViewController {
             fatalError("Can not delete item \(nserror), \(nserror.userInfo)")
         }
     }
+    
+    // MARK: - Delete
     
     func deleteItem(item: ToDoListItem) {
         context.delete(item)
@@ -547,12 +595,26 @@ extension MainScreenViewController {
     func toggleTaskCompletion(item: ToDoListItem) {
         item.isDone.toggle()
         
+        if item.isDone {
+            // Move task to completed and append to the end of completedTasks
+            if let index = activeTasks.firstIndex(of: item) {
+                activeTasks.remove(at: index)
+                completedTasks.append(item) // Always place at end of completedTasks
+            }
+        } else {
+            // Move task back to active and insert at the end of activeTasks
+            if let index = completedTasks.firstIndex(of: item) {
+                completedTasks.remove(at: index)
+                activeTasks.append(item)
+            }
+        }
         do {
             try context.save()
-            getAllItems()
         } catch {
             let nserror = error as NSError
-            fatalError("Failed to toggle task completion \(nserror), \(nserror.userInfo)")
+            fatalError("Failed to mark item as isDone: \(nserror), \(nserror.userInfo)")
         }
+        
+        tableView.reloadData()
     }
 }

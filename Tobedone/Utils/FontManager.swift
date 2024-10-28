@@ -21,7 +21,7 @@ class FontManager {
         withWeight: UIFont.Weight = .regular
     ) -> UIFont {
         UIFont(
-            name: "AvenirNext-Regular", size: withSize
+            name: "AvenirNext", size: withSize
         ) ?? UIFont.systemFont(ofSize: withSize, weight: withWeight)
     }
 }
