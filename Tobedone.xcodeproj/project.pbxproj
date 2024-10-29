@@ -19,6 +19,7 @@
 		4DCF44CC2BC1818800666EB9 /* Tobedone.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 4DCF44CA2BC1818800666EB9 /* Tobedone.xcdatamodeld */; };
 		4DCF44CE2BC1818B00666EB9 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4DCF44CD2BC1818B00666EB9 /* Assets.xcassets */; };
 		4DCF44D12BC1818B00666EB9 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4DCF44CF2BC1818B00666EB9 /* LaunchScreen.storyboard */; };
+		4DFB7F8D2CD03812008D939F /* AddTaskViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DFB7F8C2CD03812008D939F /* AddTaskViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -36,6 +37,7 @@
 		4DCF44CD2BC1818B00666EB9 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		4DCF44D02BC1818B00666EB9 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		4DCF44D22BC1818B00666EB9 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		4DFB7F8C2CD03812008D939F /* AddTaskViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddTaskViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -54,6 +56,7 @@
 			children = (
 				4DCF44C52BC1818800666EB9 /* MainScreenViewController.swift */,
 				4D39F4932C8B896000AB69DE /* SettingsViewController.swift */,
+				4DFB7F8C2CD03812008D939F /* AddTaskViewController.swift */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -209,6 +212,7 @@
 				4DCF44C42BC1818800666EB9 /* SceneDelegate.swift in Sources */,
 				4D2A04DA2C87BB7C00C0F9A6 /* ToDoListItem+CoreDataProperties.swift in Sources */,
 				4D961AE22C7BCB9900AED7AF /* CustomTableViewCell.swift in Sources */,
+				4DFB7F8D2CD03812008D939F /* AddTaskViewController.swift in Sources */,
 				4DA60ACD2C82758800CDB41A /* FontManager.swift in Sources */,
 				4DCF44CC2BC1818800666EB9 /* Tobedone.xcdatamodeld in Sources */,
 				4D3A1D3A2CA4AB0600D0958F /* SettingsTableViewCell.swift in Sources */,

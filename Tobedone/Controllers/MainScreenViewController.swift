@@ -1,8 +1,6 @@
 import UIKit
 import CoreData
 
-// MARK: - ViewController
-
 class MainScreenViewController: UIViewController {
     
     // MARK: - Properties
@@ -40,7 +38,7 @@ class MainScreenViewController: UIViewController {
 
 // MARK: - Initial Setup
 
-extension MainScreenViewController {
+private extension MainScreenViewController {
     
     func initialSetup() {
         configureUI()
