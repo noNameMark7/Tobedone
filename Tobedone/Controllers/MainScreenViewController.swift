@@ -4,7 +4,6 @@ import CoreData
 class MainScreenViewController: UIViewController {
     
     // MARK: - Properties
-    
     private let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
     
     private var activeTasks = [ToDoListItem]()
@@ -18,7 +17,6 @@ class MainScreenViewController: UIViewController {
     }()
 
     // MARK: - Lifecycle
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         initialSetup()
@@ -37,7 +35,6 @@ class MainScreenViewController: UIViewController {
 
 
 // MARK: - Initial Setup
-
 private extension MainScreenViewController {
     
     func initialSetup() {
@@ -53,7 +50,6 @@ private extension MainScreenViewController {
 
 
 // MARK: - UITableView, UINavigationController
-
 extension MainScreenViewController {
     
     func tableViewSetup() {
@@ -143,11 +139,16 @@ extension MainScreenViewController {
 
 
 // MARK: - UITableViewDataSource, UITableViewDelegate
-
 extension MainScreenViewController: UITableViewDataSource, UITableViewDelegate {
     
-    // MARK: - numberOfSections
+    func tableView(
+        _ tableView: UITableView,
+        heightForHeaderInSection section: Int
+    ) -> CGFloat {
+        50
+    }
     
+    // MARK: - numberOfSections
     func numberOfSections(in tableView: UITableView) -> Int {
         2
     }
@@ -162,7 +163,6 @@ extension MainScreenViewController: UITableViewDataSource, UITableViewDelegate {
     }
     
     // MARK: - numberOfRowsInSection
-    
     func tableView(
         _ tableView: UITableView,
         numberOfRowsInSection section: Int
@@ -171,7 +171,6 @@ extension MainScreenViewController: UITableViewDataSource, UITableViewDelegate {
     }
     
     // MARK: - cellForRowAt
-    
     func tableView(
         _ tableView: UITableView,
         cellForRowAt indexPath: IndexPath
@@ -189,7 +188,6 @@ extension MainScreenViewController: UITableViewDataSource, UITableViewDelegate {
     }
     
     // MARK: - didSelectRowAt
-    
     func tableView(
         _ tableView: UITableView,
         didSelectRowAt indexPath: IndexPath
@@ -317,7 +315,6 @@ extension MainScreenViewController: UITableViewDataSource, UITableViewDelegate {
     }
     
     // MARK: - moveRowAt
-    
     func tableView(
         _ tableView: UITableView,
         moveRowAt sourceIndexPath: IndexPath,
@@ -335,7 +332,6 @@ extension MainScreenViewController: UITableViewDataSource, UITableViewDelegate {
     }
     
     // MARK: - editingStyleForRowAt
-    
     func tableView(
         _ tableView: UITableView,
         editingStyleForRowAt indexPath: IndexPath
@@ -344,7 +340,6 @@ extension MainScreenViewController: UITableViewDataSource, UITableViewDelegate {
     }
     
     // MARK: - forRowAt
-    
     func tableView(
         _ tableView: UITableView,
         commit editingStyle: UITableViewCell.EditingStyle,
@@ -376,11 +371,9 @@ extension MainScreenViewController: UITableViewDataSource, UITableViewDelegate {
 
 
 // MARK: - UITableViewDragDelegate, UITableViewDropDelegate
-
 extension MainScreenViewController: UITableViewDragDelegate, UITableViewDropDelegate {
     
     // MARK: - itemsForBeginning
-    
     func tableView(
         _ tableView: UITableView,
         itemsForBeginning session: UIDragSession,
@@ -396,7 +389,6 @@ extension MainScreenViewController: UITableViewDragDelegate, UITableViewDropDele
     }
     
     // MARK: - performDropWith
-    
     func tableView(
         _ tableView: UITableView,
         performDropWith coordinator: UITableViewDropCoordinator
@@ -421,7 +413,6 @@ extension MainScreenViewController: UITableViewDragDelegate, UITableViewDropDele
     }
     
     // MARK: - destinationIndexPath
-    
     func reorderItems(
         coordinator: UITableViewDropCoordinator,
         destinationIndexPath: IndexPath,
@@ -478,11 +469,9 @@ extension MainScreenViewController: UITableViewDragDelegate, UITableViewDropDele
 
 
 // MARK: - Core Data
-
 extension MainScreenViewController {
     
     // MARK: - Create
-    
     func createItem(name: String, position: Int16) {
         let newItem = ToDoListItem(context: context)
         newItem.name = name
@@ -498,7 +487,6 @@ extension MainScreenViewController {
     }
     
     // MARK: - Read
-    
     func getAllItems() {
         let fetchRequest: NSFetchRequest<ToDoListItem> = ToDoListItem.fetchRequest()
         let sortDescriptor = NSSortDescriptor(key: "position", ascending: true)
@@ -520,7 +508,6 @@ extension MainScreenViewController {
     }
 
     // MARK: - Update
-    
     func updateItem(item: ToDoListItem, newName: String, newNote: String) {
         item.name = newName
         item.note = newNote
@@ -535,7 +522,6 @@ extension MainScreenViewController {
     }
     
     // MARK: - Delete
-    
     func deleteItem(item: ToDoListItem) {
         context.delete(item)
         
@@ -551,9 +537,9 @@ extension MainScreenViewController {
 
 
 // MARK: - Save new order and mark as priority
-
 extension MainScreenViewController {
     
+    // MARK: - saveNewOrderToCoreData
     func saveNewOrderToCoreData() {
         for (index, item) in activeTasks.enumerated() {
             item.position = Int16(index)
@@ -571,6 +557,7 @@ extension MainScreenViewController {
         }
     }
     
+    // MARK: - markItemAsPriority
     func markItemAsPriority(at indexPath: IndexPath) {
         let item = (indexPath.section == 0) ? activeTasks[indexPath.row] : completedTasks[indexPath.row]
         
@@ -590,6 +577,7 @@ extension MainScreenViewController {
         }
     }
     
+    // MARK: - toggleTaskCompletion
     func toggleTaskCompletion(item: ToDoListItem) {
         item.isDone.toggle()
         

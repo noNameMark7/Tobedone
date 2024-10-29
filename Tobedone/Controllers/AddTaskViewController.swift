@@ -7,7 +7,6 @@ class AddTaskViewController: UIViewController {
     
 
     // MARK: - Lifecycle
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         initialSetup()
@@ -26,7 +25,6 @@ class AddTaskViewController: UIViewController {
 
 
 // MARK: - Initial Setup
-
 private extension AddTaskViewController {
     
     func initialSetup() {
@@ -41,7 +39,6 @@ private extension AddTaskViewController {
 
 
 // MARK: - Actions
-
 private extension AddTaskViewController {
     
     func setupAction() {
