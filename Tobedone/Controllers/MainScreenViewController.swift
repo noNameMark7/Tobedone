@@ -4,10 +4,13 @@ import CoreData
 class MainScreenViewController: UIViewController {
     
     // MARK: - Properties
-    private let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
+    private let context = (
+        UIApplication.shared.delegate as! AppDelegate
+    ).persistentContainer.viewContext
     
     private var activeTasks = [ToDoListItem]()
     private var completedTasks = [ToDoListItem]()
+    private var sections = [Section]()
     
     private let tableView: UITableView = {
         let tableView = UITableView()
@@ -15,11 +18,16 @@ class MainScreenViewController: UIViewController {
         tableView.separatorStyle = .none
         return tableView
     }()
-
+    
     // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
         initialSetup()
+        
+        sections = [
+            Section(withTitle: "Active tasks"),
+            Section(withTitle: "Completed tasks")
+        ]
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -141,25 +149,39 @@ extension MainScreenViewController {
 // MARK: - UITableViewDataSource, UITableViewDelegate
 extension MainScreenViewController: UITableViewDataSource, UITableViewDelegate {
     
+    // MARK: - viewForHeaderInSection
     func tableView(
         _ tableView: UITableView,
-        heightForHeaderInSection section: Int
-    ) -> CGFloat {
-        50
+        viewForHeaderInSection section: Int
+    ) -> UIView? {
+        let headerContainer = UITableViewHeaderFooterView()
+        let header = HeaderView(
+            frame: CGRect(
+                x: 8,
+                y: 0,
+                width: tableView.frame.width,
+                height: 32
+            )
+        )
+        
+        header.delegate = self
+        header.sectionIndex = section
+        
+        header.buttonView.setTitle(sections[section].withTitle, for: .normal)
+        header.buttonView.backgroundColor = section == 0 ? #colorLiteral(red: 0.9372549057, green: 0.3490196168, blue: 0.1921568662, alpha: 1) : #colorLiteral(red: 0.4666666687, green: 0.7647058964, blue: 0.2666666806, alpha: 1)
+        header.buttonView.sizeToFit()
+        headerContainer.contentView.addSubview(header)
+        return headerContainer
+    }
+    
+    // MARK: - heightForHeaderInSection
+    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        31
     }
     
     // MARK: - numberOfSections
     func numberOfSections(in tableView: UITableView) -> Int {
-        2
-    }
-    
-    // MARK: - titleForHeaderInSection
-    
-    func tableView(
-        _ tableView: UITableView,
-        titleForHeaderInSection section: Int
-    ) -> String? {
-        section == 0 ? "Active tasks" : "Completed tasks"
+        sections.count
     }
     
     // MARK: - numberOfRowsInSection
@@ -167,7 +189,9 @@ extension MainScreenViewController: UITableViewDataSource, UITableViewDelegate {
         _ tableView: UITableView,
         numberOfRowsInSection section: Int
     ) -> Int {
-        section == 0 ? activeTasks.count : completedTasks.count
+        let section = sections[section]
+        
+        return section.isOpened ? (section.withTitle == "Active tasks" ? activeTasks.count : completedTasks.count) : 0
     }
     
     // MARK: - cellForRowAt
@@ -204,7 +228,7 @@ extension MainScreenViewController: UITableViewDataSource, UITableViewDelegate {
             preferredStyle: .actionSheet
         )
         
-        let edit = UIAlertAction(
+        let editAction = UIAlertAction(
             title: "Edit",
             style: .default
         ) { [weak self] _ in
@@ -255,7 +279,7 @@ extension MainScreenViewController: UITableViewDataSource, UITableViewDelegate {
             strongSelf.present(alert, animated: true)
         }
         
-        let priority = UIAlertAction(
+        let priorityAction = UIAlertAction(
             title: priorityTitle,
             style: .default
         ) { [weak self] _ in
@@ -263,14 +287,14 @@ extension MainScreenViewController: UITableViewDataSource, UITableViewDelegate {
             strongSelf.markItemAsPriority(at: indexPath)
         }
         
-        let completed = UIAlertAction(
+        let completedAction = UIAlertAction(
             title: completedTitle,
             style: .default
         ) { [weak self] _ in
             self?.toggleTaskCompletion(item: item)
         }
     
-        let delete = UIAlertAction(
+        let deleteAction = UIAlertAction(
             title: "Delete",
             style: .destructive
         ) { [weak self] _ in
@@ -300,16 +324,16 @@ extension MainScreenViewController: UITableViewDataSource, UITableViewDelegate {
             self?.present(alert, animated: true)
         }
         
-        let cancel = UIAlertAction(
+        let cancelAction = UIAlertAction(
             title: "Cancel",
             style: .cancel
         )
         
-        sheet.addAction(edit)
-        sheet.addAction(priority)
-        sheet.addAction(completed)
-        sheet.addAction(delete)
-        sheet.addAction(cancel)
+        sheet.addAction(editAction)
+        sheet.addAction(priorityAction)
+        sheet.addAction(completedAction)
+        sheet.addAction(deleteAction)
+        sheet.addAction(cancelAction)
     
         present(sheet, animated: true)
     }
@@ -602,5 +626,42 @@ extension MainScreenViewController {
         }
         
         tableView.reloadData()
+    }
+}
+
+
+// MARK: - HeaderViewDelegate
+extension MainScreenViewController: HeaderViewDelegate {
+
+    func callHeader(by index: Int) {
+        
+        let section = sections[index]
+        section.isOpened.toggle()
+        
+        // Prepare index paths for row updates
+        var indexPaths: [IndexPath] = []
+        let rowCount = section.withTitle == "Active tasks" ? activeTasks.count : completedTasks.count
+        
+        for row in 0..<rowCount {
+            indexPaths.append(IndexPath(row: row, section: index))
+        }
+        
+        // Animate the row changes
+        UIView.animate(
+            withDuration: 0.3,
+            delay: 0,
+            options: .transitionCurlDown,
+            animations: {
+                DispatchQueue.main.async {
+                    self.tableView.beginUpdates()
+                    if section.isOpened {
+                        self.tableView.insertRows(at: indexPaths, with: .fade)
+                    } else {
+                        self.tableView.deleteRows(at: indexPaths, with: .fade)
+                    }
+                    self.tableView.endUpdates()
+                }
+            }, completion: nil
+        )
     }
 }
