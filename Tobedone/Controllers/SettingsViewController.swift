@@ -7,11 +7,9 @@ struct SettingsOption {
     let handler: (() -> Void)
 }
 
-// MARK: - SettingsViewController
-
 class SettingsViewController: UIViewController {
 
-    // MARK: - Properties
+    // MARK: - UI
     
     private let tableView: UITableView = {
         let tableView = UITableView(frame: .zero, style: .grouped)
@@ -22,7 +20,6 @@ class SettingsViewController: UIViewController {
     var models = [SettingsOption]()
     
     // MARK: - Lifecycle
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         initialSetup()
@@ -45,7 +42,6 @@ class SettingsViewController: UIViewController {
 
 
 // MARK: - Initial setup
-
 private extension SettingsViewController {
     
     func initialSetup() {
@@ -63,7 +59,6 @@ private extension SettingsViewController {
 
 
 // MARK: - UITableView, UINavigationController
-
 extension SettingsViewController {
     
     func tableViewSetup() {
@@ -94,7 +89,6 @@ extension SettingsViewController {
 
 
 // MARK: - UITableViewDataSource, UITableViewDelegate
-
 extension SettingsViewController: UITableViewDataSource, UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {

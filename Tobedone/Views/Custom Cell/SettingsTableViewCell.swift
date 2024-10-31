@@ -1,7 +1,5 @@
 import UIKit
 
-// MARK: - UITableViewCell
-
 class SettingsTableViewCell: UITableViewCell {
     
     static let identifier = "SettingsTableViewCell"
@@ -34,7 +32,6 @@ class SettingsTableViewCell: UITableViewCell {
 
 
 // MARK: - Initial Setup
-
 private extension SettingsTableViewCell {
     
     func initialSetup() {
@@ -47,7 +44,6 @@ private extension SettingsTableViewCell {
 
 
 // MARK: - Cell Configuration
-
 extension SettingsTableViewCell {
    
 }

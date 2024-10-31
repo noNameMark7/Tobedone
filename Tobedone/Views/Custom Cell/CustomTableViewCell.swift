@@ -1,7 +1,5 @@
 import UIKit
 
-// MARK: - UITableViewCell
-
 class CustomTableViewCell: UITableViewCell {
     
     // MARK: - Properties
@@ -63,7 +61,6 @@ class CustomTableViewCell: UITableViewCell {
 
 
 // MARK: - Initial Setup
-
 private extension CustomTableViewCell {
     
     func initialSetup() {
@@ -111,12 +108,23 @@ private extension CustomTableViewCell {
 
 
 // MARK: - Cell Configuration
-
 extension CustomTableViewCell {
     
     func configurationOfValuesWith(_ item: ToDoListItem) {
-        taskLabel.text = item.name
         noteLabel.text = item.note
         isPriorityImageView.isHidden = !item.isPriority
+        
+        if item.isDone {
+            let attributedText = NSAttributedString(
+                string: item.name ?? "",
+                attributes: [
+                    .strikethroughStyle: NSUnderlineStyle.single.rawValue,
+                    .foregroundColor: UIColor.gray
+                ]
+            )
+            taskLabel.attributedText = attributedText
+        } else {
+            taskLabel.attributedText = NSAttributedString(string: item.name ?? "")
+        }
     }
 }

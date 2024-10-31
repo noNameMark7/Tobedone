@@ -22,7 +22,7 @@ class HeaderView: UIView {
         button.contentHorizontalAlignment = .trailing
         button.contentEdgeInsets = UIEdgeInsets(top: 7, left: 7, bottom: 7, right: 7)
         button.layer.cornerRadius = 5
-        button.layer.masksToBounds = true
+        button.clipsToBounds = true
         button.setTitleColor(.black, for: .normal)
         button.addTarget(self, action: #selector(didTappedButton), for: .touchUpInside)
         return button
