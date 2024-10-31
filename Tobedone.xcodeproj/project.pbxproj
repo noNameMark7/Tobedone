@@ -131,15 +131,23 @@
 				4DB4F8F62CB1D9BA007A9A67 /* Application */,
 				4D9B56FF2C7BC77500AA4FC3 /* Core Data */,
 				4DA60ACB2C82756300CDB41A /* Utils */,
+				4DE59BAF2CD4337C005FFB61 /* Models */,
 				4D961ADF2C7BCB6A00AED7AF /* Views */,
 				4D80C1C32BC5AA5C00C07A0F /* Controllers */,
 				4DCF44CD2BC1818B00666EB9 /* Assets.xcassets */,
 				4DCF44CF2BC1818B00666EB9 /* LaunchScreen.storyboard */,
 				4DCF44D22BC1818B00666EB9 /* Info.plist */,
 				4DCF44CA2BC1818800666EB9 /* Tobedone.xcdatamodeld */,
-				4DCB6ABB2CD377BF00BB2E1A /* Section.swift */,
 			);
 			path = Tobedone;
+			sourceTree = "<group>";
+		};
+		4DE59BAF2CD4337C005FFB61 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				4DCB6ABB2CD377BF00BB2E1A /* Section.swift */,
+			);
+			path = Models;
 			sourceTree = "<group>";
 		};
 		4DFB7FBA2CD18243008D939F /* Header */ = {

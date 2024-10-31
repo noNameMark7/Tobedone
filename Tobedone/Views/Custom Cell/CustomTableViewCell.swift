@@ -4,8 +4,10 @@ import UIKit
 
 class CustomTableViewCell: UITableViewCell {
     
+    // MARK: - Properties
     static let identifier = "CustomTableViewCell"
     
+    // MARK: - UI Components
     private let containerView: UIView = {
         let view = UIView()
         view.translatesAutoresizingMaskIntoConstraints = false
@@ -40,6 +42,7 @@ class CustomTableViewCell: UITableViewCell {
         return imageView
     }()
     
+    // MARK: - Lifecycle
     override init(
         style: UITableViewCell.CellStyle,
         reuseIdentifier: String?

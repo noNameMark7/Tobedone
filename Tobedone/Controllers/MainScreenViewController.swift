@@ -10,8 +10,12 @@ class MainScreenViewController: UIViewController {
     
     private var activeTasks = [ToDoListItem]()
     private var completedTasks = [ToDoListItem]()
-    private var sections = [Section]()
+    private var sections: [Section] = [
+        Section(withTitle: "Active tasks"),
+        Section(withTitle: "Completed tasks")
+    ]
     
+    // MARK: - UI Components
     private let tableView: UITableView = {
         let tableView = UITableView()
         tableView.translatesAutoresizingMaskIntoConstraints = false
@@ -23,11 +27,6 @@ class MainScreenViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         initialSetup()
-        
-        sections = [
-            Section(withTitle: "Active tasks"),
-            Section(withTitle: "Completed tasks")
-        ]
     }
     
     override func viewWillAppear(_ animated: Bool) {
