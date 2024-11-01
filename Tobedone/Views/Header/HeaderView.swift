@@ -5,36 +5,52 @@ protocol HeaderViewDelegate: AnyObject {
 }
 
 class HeaderView: UIView {
+    
+    // MARK: - Properties
     var sectionIndex: Int?
     
     weak var delegate: HeaderViewDelegate?
     
-    lazy var buttonView: UIButton = {
-        let button = UIButton(
-            frame: CGRect(
-                x: self.frame.origin.x,
-                y: self.frame.origin.y,
-                width: self.frame.width,
-                height: self.frame.height
-            )
-        )
+    // MARK: - UI Components
+    lazy var sectionsButtonView: UIButton = {
+        let button = UIButton(type: .system)
+        
+        var config = UIButton.Configuration.plain()
+        config.baseForegroundColor = .black
+        config.contentInsets = NSDirectionalEdgeInsets(top: 7, leading: 7, bottom: 7, trailing: 7)
+        
+        button.configuration = config
         button.titleLabel?.font = FontManager.shared.labelFont(withSize: 14, withWeight: .bold)
-        button.contentHorizontalAlignment = .trailing
-        button.contentEdgeInsets = UIEdgeInsets(top: 7, left: 7, bottom: 7, right: 7)
-        button.layer.cornerRadius = 5
-        button.clipsToBounds = true
         button.setTitleColor(.black, for: .normal)
         button.addTarget(self, action: #selector(didTappedButton), for: .touchUpInside)
+        button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
 
+    // MARK: - Lifecycle
     override init(frame: CGRect) {
         super.init(frame: frame)
-        addSubview(buttonView)
+        addSubview(sectionsButtonView)
+        
+        NSLayoutConstraint.activate([
+            sectionsButtonView.topAnchor.constraint(equalTo: self.topAnchor),
+            sectionsButtonView.bottomAnchor.constraint(equalTo: self.bottomAnchor),
+            sectionsButtonView.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 8),
+            sectionsButtonView.trailingAnchor.constraint(lessThanOrEqualTo: self.trailingAnchor, constant: -8)
+        ])
+        
+        // Set the cornerRadius in layoutSubviews to ensure it adapts to the button's final size
+        self.layer.masksToBounds = true
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        // Apply cornerRadius once layout completes
+        sectionsButtonView.layer.cornerRadius = 5
     }
     
     @objc private func didTappedButton() {

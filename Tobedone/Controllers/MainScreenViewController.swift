@@ -154,27 +154,32 @@ extension MainScreenViewController: UITableViewDataSource, UITableViewDelegate {
         viewForHeaderInSection section: Int
     ) -> UIView? {
         let headerContainer = UITableViewHeaderFooterView()
-        let header = HeaderView(
-            frame: CGRect(
-                x: 8,
-                y: 0,
-                width: tableView.frame.width,
-                height: 32
-            )
-        )
+        let header = HeaderView()
         
         header.delegate = self
         header.sectionIndex = section
+        header.sectionsButtonView.setTitle(sections[section].withTitle, for: .normal)
+        header.sectionsButtonView.backgroundColor = section == 0 ? #colorLiteral(red: 0.9372549057, green: 0.3490196168, blue: 0.1921568662, alpha: 1) : #colorLiteral(red: 0.4666666687, green: 0.7647058964, blue: 0.2666666806, alpha: 1)
         
-        header.buttonView.setTitle(sections[section].withTitle, for: .normal)
-        header.buttonView.backgroundColor = section == 0 ? #colorLiteral(red: 0.9372549057, green: 0.3490196168, blue: 0.1921568662, alpha: 1) : #colorLiteral(red: 0.4666666687, green: 0.7647058964, blue: 0.2666666806, alpha: 1)
-        header.buttonView.sizeToFit()
+        // Add `HeaderView` as a subview to the header container
+        header.translatesAutoresizingMaskIntoConstraints = false
         headerContainer.contentView.addSubview(header)
+        
+        // Set constraints for `HeaderView` within the container
+        NSLayoutConstraint.activate([
+            header.leadingAnchor.constraint(equalTo: headerContainer.contentView.leadingAnchor),
+            header.topAnchor.constraint(equalTo: headerContainer.contentView.topAnchor),
+            header.bottomAnchor.constraint(equalTo: headerContainer.contentView.bottomAnchor)
+        ])
+        
         return headerContainer
     }
     
     // MARK: - heightForHeaderInSection
-    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+    func tableView(
+        _ tableView: UITableView,
+        heightForHeaderInSection section: Int
+    ) -> CGFloat {
         31
     }
     
@@ -188,9 +193,11 @@ extension MainScreenViewController: UITableViewDataSource, UITableViewDelegate {
         _ tableView: UITableView,
         numberOfRowsInSection section: Int
     ) -> Int {
-        let section = sections[section]
-        
-        return section.isOpened ? (section.withTitle == "Active tasks" ? activeTasks.count : completedTasks.count) : 0
+        return sections[section].isOpened ? (
+            sections[section].withTitle == "Active tasks"
+            ? activeTasks.count
+            : completedTasks.count
+        ) : 0
     }
     
     // MARK: - cellForRowAt
