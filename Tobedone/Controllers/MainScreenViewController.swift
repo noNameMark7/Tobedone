@@ -12,7 +12,7 @@ class MainScreenViewController: UIViewController {
     private var completedTasks = [ToDoListItem]()
     private var sections: [Section] = [
         Section(withTitle: "Active tasks"),
-        Section(withTitle: "Completed tasks")
+        Section(withTitle: "Completed tasks", isOpened: false)
     ]
     
     // MARK: - UI Components
