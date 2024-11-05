@@ -31,12 +31,17 @@ class MainScreenViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        getAllItems()
+        fetchItems()
     }
     
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         tableView.frame = view.bounds
+    }
+    
+    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+        super.traitCollectionDidChange(previousTraitCollection)
+        updateAppearance(for: traitCollection)
     }
 }
 
@@ -52,6 +57,17 @@ private extension MainScreenViewController {
     
     func configureUI() {
         view.addSubview(tableView)
+        
+        updateAppearance(for: traitCollection)
+    }
+    
+    func updateAppearance(for traitCollection: UITraitCollection) {
+        if traitCollection.userInterfaceStyle == .dark {
+            tableView.backgroundColor = #colorLiteral(red: 0, green: 0, blue: 0, alpha: 1)
+        } else {
+            tableView.backgroundColor = #colorLiteral(red: 0.9490196078, green: 0.9490196078, blue: 0.9647058824, alpha: 1)
+            
+        }
     }
 }
 
@@ -79,9 +95,7 @@ extension MainScreenViewController {
         title = "to be done"
         
         navigationController?.navigationBar.prefersLargeTitles = true
-        
         navigationController?.navigationBar.largeTitleTextAttributes = FontManager.shared.navigationBarTitleAttributes(large: true)
-        
         navigationController?.navigationBar.titleTextAttributes = FontManager.shared.navigationBarTitleAttributes()
         
         navigationItem.rightBarButtonItem = UIBarButtonItem(
@@ -101,39 +115,11 @@ extension MainScreenViewController {
     }
     
     @objc private func didTappedAddTaskButton() {
-        debugPrint("Button is pressed...")
-        
-        let alert = UIAlertController(
-            title: "New Task",
-            message: "Enter new task",
-            preferredStyle: .alert
-        )
-        
-        let addAction = UIAlertAction(
-            title: "Add",
-            style: .default
-        ) { [weak self] _ in
-            guard let strongSelf = self else { return }
-            
-            guard let field = alert.textFields?.first,
-                  let text = field.text,
-                  !text.isEmpty else {
-                return
-            }
-            let newPosition: Int16 = Int16(strongSelf.activeTasks.count)
-            strongSelf.createItem(name: text, position: newPosition)
-        }
-        
-        let cancelAction = UIAlertAction(
-            title: "Cancel",
-            style: .cancel
-        )
-        
-        alert.addTextField()
-        alert.addAction(addAction)
-        alert.addAction(cancelAction)
-        
-        present(alert, animated: true)
+        let addTaskVC = AddTaskViewController()
+        addTaskVC.delegate = self
+        addTaskVC.modalPresentationStyle = .custom
+        addTaskVC.transitioningDelegate = self
+        present(addTaskVC, animated: true)
     }
     
     @objc private func didTappedSettingsButton() {
@@ -155,7 +141,7 @@ extension MainScreenViewController: UITableViewDataSource, UITableViewDelegate {
     ) -> UIView? {
         let headerContainer = UITableViewHeaderFooterView()
         let header = HeaderView()
-        
+        header.backgroundColor = .clear
         header.delegate = self
         header.sectionIndex = section
         header.sectionsButtonView.setTitle(sections[section].withTitle, for: .normal)
@@ -167,9 +153,10 @@ extension MainScreenViewController: UITableViewDataSource, UITableViewDelegate {
         
         // Set constraints for `HeaderView` within the container
         NSLayoutConstraint.activate([
-            header.leadingAnchor.constraint(equalTo: headerContainer.contentView.leadingAnchor),
             header.topAnchor.constraint(equalTo: headerContainer.contentView.topAnchor),
-            header.bottomAnchor.constraint(equalTo: headerContainer.contentView.bottomAnchor)
+            header.leadingAnchor.constraint(equalTo: headerContainer.contentView.leadingAnchor),
+            header.bottomAnchor.constraint(equalTo: headerContainer.contentView.bottomAnchor),
+            header.trailingAnchor.constraint(equalTo: headerContainer.contentView.trailingAnchor)
         ])
         
         return headerContainer
@@ -239,29 +226,29 @@ extension MainScreenViewController: UITableViewDataSource, UITableViewDelegate {
             style: .default
         ) { [weak self] _ in
             guard let strongSelf = self else { return }
-            
+
             let alert = UIAlertController(
                 title: "Edit Task",
                 message: "Edit task or add some note",
                 preferredStyle: .alert
             )
-            
+
             alert.addTextField { textField in
                 textField.text = item.name // Existing name
                 textField.placeholder = "Enter new task"
             }
-            
+
             alert.addTextField { textField in
                 textField.text = item.note // Enter note
                 textField.placeholder = "Add a note (optional)"
             }
-            
+
             let saveAction = UIAlertAction(
                 title: "Save",
                 style: .default
             ) { [weak self] _ in
                 guard let strongSelf = self else { return }
-                
+
                 // Get text from both fields
                 guard let nameField = alert.textFields?[0],
                       let noteField = alert.textFields?[1],
@@ -269,7 +256,7 @@ extension MainScreenViewController: UITableViewDataSource, UITableViewDelegate {
                       !newName.isEmpty else {
                     return
                 }
-                
+
                 let newNote = noteField.text ?? ""
                 strongSelf.updateItem(item: item, newName: newName, newNote: newNote)
             }
@@ -502,14 +489,15 @@ extension MainScreenViewController: UITableViewDragDelegate, UITableViewDropDele
 extension MainScreenViewController {
     
     // MARK: - Create
-    func createItem(name: String, position: Int16) {
+    func createItem(name: String, note: String?, position: Int16) {
         let newItem = ToDoListItem(context: context)
         newItem.name = name
+        newItem.note = note
         newItem.position = position
         
         do {
             try context.save()
-            getAllItems()
+            fetchItems()
         } catch {
             let nserror = error as NSError
             fatalError("Can not create item \(nserror), \(nserror.userInfo)")
@@ -517,7 +505,7 @@ extension MainScreenViewController {
     }
     
     // MARK: - Read
-    func getAllItems() {
+    func fetchItems() {
         let fetchRequest: NSFetchRequest<ToDoListItem> = ToDoListItem.fetchRequest()
         let sortDescriptor = NSSortDescriptor(key: "position", ascending: true)
         fetchRequest.sortDescriptors = [sortDescriptor]
@@ -544,7 +532,7 @@ extension MainScreenViewController {
         
         do {
             try context.save()
-            getAllItems()
+            fetchItems()
         } catch {
             let nserror = error as NSError
             fatalError("Can not delete item \(nserror), \(nserror.userInfo)")
@@ -557,7 +545,7 @@ extension MainScreenViewController {
         
         do {
             try context.save()
-            getAllItems()
+            fetchItems()
         } catch {
             let nserror = error as NSError
             fatalError("Can not delete item \(nserror), \(nserror.userInfo)")
@@ -580,7 +568,7 @@ extension MainScreenViewController {
         
         do {
             try context.save()
-            getAllItems()
+            fetchItems()
         } catch {
             let nserror = error as NSError
             fatalError("Cannot save order \(nserror), \(nserror.userInfo)")
@@ -595,7 +583,7 @@ extension MainScreenViewController {
         
         do {
             try context.save()
-            getAllItems()
+            fetchItems()
         } catch {
             let nserror = error as NSError
             fatalError("Failed to mark item as priority: \(nserror), \(nserror.userInfo)")
@@ -669,5 +657,40 @@ extension MainScreenViewController: HeaderViewDelegate {
                 }
             }, completion: nil
         )
+    }
+}
+
+
+// MARK: - UIViewControllerTransitioningDelegate
+extension MainScreenViewController: UIViewControllerTransitioningDelegate {
+    
+    func presentationController(
+        forPresented presented: UIViewController,
+        presenting: UIViewController?,
+        source: UIViewController
+    ) -> UIPresentationController? {
+        CustomSizePresentationController(
+            presentedViewController: presented,
+            presenting: presenting
+        )
+    }
+}
+
+
+// MARK: - AddTaskViewControllerDelegate
+extension MainScreenViewController: AddTaskViewControllerDelegate {
+    
+    func didAdd(task: String, note: String?) {
+        // Find the highest position in activeTasks and increment by one
+        let maxPosition = activeTasks.max(by: { $0.position < $1.position })?.position ?? -1
+        let newPosition: Int16 = maxPosition + 1
+
+        createItem(name: task, note: note, position: newPosition)
+
+        // Optionally, refresh your data source to make sure tasks are displayed in the correct order
+        activeTasks.sort { $0.position < $1.position }
+        DispatchQueue.main.async {
+            self.tableView.reloadData()
+        }
     }
 }

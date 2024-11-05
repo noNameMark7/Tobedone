@@ -13,6 +13,8 @@
 		4D3A1D3A2CA4AB0600D0958F /* SettingsTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D3A1D392CA4AB0500D0958F /* SettingsTableViewCell.swift */; };
 		4D961AE22C7BCB9900AED7AF /* CustomTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D961AE12C7BCB9900AED7AF /* CustomTableViewCell.swift */; };
 		4DA60ACD2C82758800CDB41A /* FontManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DA60ACC2C82758800CDB41A /* FontManager.swift */; };
+		4DB580832CD81E7200051BE2 /* CustomSizePresentationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DB580822CD81E7200051BE2 /* CustomSizePresentationController.swift */; };
+		4DB580852CD97DF300051BE2 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DB580842CD97DF300051BE2 /* Constants.swift */; };
 		4DCB6ABC2CD377BF00BB2E1A /* Section.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DCB6ABB2CD377BF00BB2E1A /* Section.swift */; };
 		4DCF44C22BC1818800666EB9 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DCF44C12BC1818800666EB9 /* AppDelegate.swift */; };
 		4DCF44C42BC1818800666EB9 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DCF44C32BC1818800666EB9 /* SceneDelegate.swift */; };
@@ -31,6 +33,8 @@
 		4D3A1D392CA4AB0500D0958F /* SettingsTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsTableViewCell.swift; sourceTree = "<group>"; };
 		4D961AE12C7BCB9900AED7AF /* CustomTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomTableViewCell.swift; sourceTree = "<group>"; };
 		4DA60ACC2C82758800CDB41A /* FontManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FontManager.swift; sourceTree = "<group>"; };
+		4DB580822CD81E7200051BE2 /* CustomSizePresentationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomSizePresentationController.swift; sourceTree = "<group>"; };
+		4DB580842CD97DF300051BE2 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		4DCB6ABB2CD377BF00BB2E1A /* Section.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Section.swift; sourceTree = "<group>"; };
 		4DCF44BE2BC1818800666EB9 /* Tobedone.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Tobedone.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		4DCF44C12BC1818800666EB9 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -61,6 +65,7 @@
 				4DCF44C52BC1818800666EB9 /* MainScreenViewController.swift */,
 				4D39F4932C8B896000AB69DE /* SettingsViewController.swift */,
 				4DFB7F8C2CD03812008D939F /* AddTaskViewController.swift */,
+				4DB580822CD81E7200051BE2 /* CustomSizePresentationController.swift */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -96,6 +101,7 @@
 			isa = PBXGroup;
 			children = (
 				4DA60ACC2C82758800CDB41A /* FontManager.swift */,
+				4DB580842CD97DF300051BE2 /* Constants.swift */,
 			);
 			path = Utils;
 			sourceTree = "<group>";
@@ -233,12 +239,14 @@
 				4DCF44C22BC1818800666EB9 /* AppDelegate.swift in Sources */,
 				4DCF44C42BC1818800666EB9 /* SceneDelegate.swift in Sources */,
 				4D2A04DA2C87BB7C00C0F9A6 /* ToDoListItem+CoreDataProperties.swift in Sources */,
+				4DB580852CD97DF300051BE2 /* Constants.swift in Sources */,
 				4D961AE22C7BCB9900AED7AF /* CustomTableViewCell.swift in Sources */,
 				4DFB7F8D2CD03812008D939F /* AddTaskViewController.swift in Sources */,
 				4DCB6ABC2CD377BF00BB2E1A /* Section.swift in Sources */,
 				4DFB7FB92CD17185008D939F /* HeaderView.swift in Sources */,
 				4DA60ACD2C82758800CDB41A /* FontManager.swift in Sources */,
 				4DCF44CC2BC1818800666EB9 /* Tobedone.xcdatamodeld in Sources */,
+				4DB580832CD81E7200051BE2 /* CustomSizePresentationController.swift in Sources */,
 				4D3A1D3A2CA4AB0600D0958F /* SettingsTableViewCell.swift in Sources */,
 				4D39F4942C8B896000AB69DE /* SettingsViewController.swift in Sources */,
 			);

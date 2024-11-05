@@ -100,8 +100,10 @@ private extension CustomTableViewCell {
     func updateAppearance(for traitCollection: UITraitCollection) {
         if traitCollection.userInterfaceStyle == .dark {
             containerView.backgroundColor = #colorLiteral(red: 0.1298420429, green: 0.1298461258, blue: 0.1298439503, alpha: 1)
+            contentView.backgroundColor = #colorLiteral(red: 0, green: 0, blue: 0, alpha: 1)
         } else {
-            containerView.backgroundColor = #colorLiteral(red: 0.921431005, green: 0.9214526415, blue: 0.9214410186, alpha: 0.5)
+            containerView.backgroundColor = #colorLiteral(red: 1, green: 1, blue: 1, alpha: 1)
+            contentView.backgroundColor = #colorLiteral(red: 0.9490196078, green: 0.9490196078, blue: 0.9647058824, alpha: 1)
         }
     }
 }

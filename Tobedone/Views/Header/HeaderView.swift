@@ -15,11 +15,11 @@ class HeaderView: UIView {
     lazy var sectionsButtonView: UIButton = {
         let button = UIButton(type: .system)
         
-        var config = UIButton.Configuration.plain()
-        config.baseForegroundColor = .black
-        config.contentInsets = NSDirectionalEdgeInsets(top: 7, leading: 7, bottom: 7, trailing: 7)
+        var configuration = UIButton.Configuration.plain()
+        configuration.baseForegroundColor = .black
+        configuration.contentInsets = NSDirectionalEdgeInsets(top: 7, leading: 7, bottom: 7, trailing: 7)
         
-        button.configuration = config
+        button.configuration = configuration
         button.titleLabel?.font = FontManager.shared.labelFont(withSize: 14, withWeight: .bold)
         button.setTitleColor(.black, for: .normal)
         button.addTarget(self, action: #selector(didTappedButton), for: .touchUpInside)
@@ -35,7 +35,7 @@ class HeaderView: UIView {
         NSLayoutConstraint.activate([
             sectionsButtonView.topAnchor.constraint(equalTo: self.topAnchor),
             sectionsButtonView.bottomAnchor.constraint(equalTo: self.bottomAnchor),
-            sectionsButtonView.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 8),
+            sectionsButtonView.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 16),
             sectionsButtonView.trailingAnchor.constraint(lessThanOrEqualTo: self.trailingAnchor, constant: -8)
         ])
         
