@@ -2,12 +2,14 @@ import UIKit
 
 protocol AddTaskViewControllerDelegate: AnyObject {
     func didAdd(task: String, note: String?)
+    func didEdit(task: ToDoListItem, editedTask: String, editedNote: String?)
 }
 
 class AddTaskViewController: UIViewController {
     
     // MARK: - Properties
     weak var delegate: AddTaskViewControllerDelegate?
+    var taskToEdit: ToDoListItem?
     
     // MARK: - UI Components
     private let addTaskTextView: UITextView = {
@@ -86,11 +88,10 @@ private extension AddTaskViewController {
         configureUI()
         setupActions()
         setupTextViewDelegates()
+        checkingForTextThatNeedsToBeEdited()
     }
     
     func configureUI() {
-        view.backgroundColor = .systemBackground
-        
         view.addSubview(addTaskTextView)
         view.addSubview(addNoteTextView)
         view.addSubview(saveButton)
@@ -123,10 +124,10 @@ private extension AddTaskViewController {
     }
     
     func updateAppearance(for traitCollection: UITraitCollection) {
-        if traitCollection.userInterfaceStyle == .light {
+        if traitCollection.userInterfaceStyle == .dark {
             
         } else {
-            
+            view.backgroundColor = .systemBackground
         }
     }
 }
@@ -154,7 +155,12 @@ private extension AddTaskViewController {
     func didTappedSaveButton() {
         let taskText = addTaskTextView.text.trimmingCharacters(in: .whitespacesAndNewlines)
         let noteText = addNoteTextView.text.trimmingCharacters(in: .whitespacesAndNewlines)
-        delegate?.didAdd(task: taskText, note: noteText.isEmpty ? EMPTY_PLACEHOLDER : noteText)
+        
+        if let taskToEdit = taskToEdit {
+            delegate?.didEdit(task: taskToEdit, editedTask: taskText, editedNote: noteText)
+        } else {
+            delegate?.didAdd(task: taskText, note: noteText.isEmpty ? nil : noteText)
+        }
         dismiss(animated: true)
     }
     
@@ -172,6 +178,19 @@ private extension AddTaskViewController {
         } else {
             saveButton.setTitleColor(PLACEHOLDER_COLOR, for: .normal)
             saveButton.isEnabled = false
+        }
+    }
+    
+    func checkingForTextThatNeedsToBeEdited() {
+        if let task = taskToEdit {
+            addTaskTextView.text = task.name
+            addNoteTextView.text = task.note
+            
+            addTaskTextView.textColor = LABEL_TEXT_COLOR
+            addNoteTextView.textColor = task.note == nil ? PLACEHOLDER_COLOR : LABEL_TEXT_COLOR
+            
+            saveButton.setTitle("Update", for: .normal)
+            saveButton.setTitleColor(LINK_TEXT_COLOR, for: .normal)
         }
     }
 }

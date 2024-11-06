@@ -226,50 +226,7 @@ extension MainScreenViewController: UITableViewDataSource, UITableViewDelegate {
             style: .default
         ) { [weak self] _ in
             guard let strongSelf = self else { return }
-
-            let alert = UIAlertController(
-                title: "Edit Task",
-                message: "Edit task or add some note",
-                preferredStyle: .alert
-            )
-
-            alert.addTextField { textField in
-                textField.text = item.name // Existing name
-                textField.placeholder = "Enter new task"
-            }
-
-            alert.addTextField { textField in
-                textField.text = item.note // Enter note
-                textField.placeholder = "Add a note (optional)"
-            }
-
-            let saveAction = UIAlertAction(
-                title: "Save",
-                style: .default
-            ) { [weak self] _ in
-                guard let strongSelf = self else { return }
-
-                // Get text from both fields
-                guard let nameField = alert.textFields?[0],
-                      let noteField = alert.textFields?[1],
-                      let newName = nameField.text,
-                      !newName.isEmpty else {
-                    return
-                }
-
-                let newNote = noteField.text ?? ""
-                strongSelf.updateItem(item: item, newName: newName, newNote: newNote)
-            }
-            
-            let cancelAction = UIAlertAction(
-                title: "Cancel",
-                style: .cancel
-            )
-            
-            alert.addAction(saveAction)
-            alert.addAction(cancelAction)
-            
-            strongSelf.present(alert, animated: true)
+            strongSelf.editTask(with: item)
         }
         
         let priorityAction = UIAlertAction(
@@ -554,10 +511,10 @@ extension MainScreenViewController {
 }
 
 
-// MARK: - Save new order and mark as priority
+// MARK: - Helper methods
 extension MainScreenViewController {
     
-    // MARK: - saveNewOrderToCoreData
+    // MARK: - save new order to core data
     func saveNewOrderToCoreData() {
         for (index, item) in activeTasks.enumerated() {
             item.position = Int16(index)
@@ -575,7 +532,7 @@ extension MainScreenViewController {
         }
     }
     
-    // MARK: - markItemAsPriority
+    // MARK: - mark item as priority
     func markItemAsPriority(at indexPath: IndexPath) {
         let item = (indexPath.section == 0) ? activeTasks[indexPath.row] : completedTasks[indexPath.row]
         
@@ -595,7 +552,7 @@ extension MainScreenViewController {
         }
     }
     
-    // MARK: - toggleTaskCompletion
+    // MARK: - toggle task completion
     func toggleTaskCompletion(item: ToDoListItem) {
         item.isDone.toggle()
         
@@ -620,6 +577,16 @@ extension MainScreenViewController {
         }
         
         tableView.reloadData()
+    }
+    
+    // MARK: - edit task
+    func editTask(with item: ToDoListItem) {
+        let addTaskVC = AddTaskViewController()
+        addTaskVC.delegate = self
+        addTaskVC.taskToEdit = item
+        addTaskVC.modalPresentationStyle = .custom
+        addTaskVC.transitioningDelegate = self
+        present(addTaskVC, animated: true)
     }
 }
 
@@ -684,13 +651,17 @@ extension MainScreenViewController: AddTaskViewControllerDelegate {
         // Find the highest position in activeTasks and increment by one
         let maxPosition = activeTasks.max(by: { $0.position < $1.position })?.position ?? -1
         let newPosition: Int16 = maxPosition + 1
-
         createItem(name: task, note: note, position: newPosition)
-
+        
         // Optionally, refresh your data source to make sure tasks are displayed in the correct order
         activeTasks.sort { $0.position < $1.position }
-        DispatchQueue.main.async {
-            self.tableView.reloadData()
-        }
+        DispatchQueue.main.async { self.tableView.reloadData() }
+    }
+    
+    func didEdit(task: ToDoListItem, editedTask: String, editedNote: String?) {
+        // Update task and save changes
+        guard let note = editedNote else { return }
+        updateItem(item: task, newName: editedTask, newNote: note)
+        DispatchQueue.main.async { self.tableView.reloadData() }
     }
 }
