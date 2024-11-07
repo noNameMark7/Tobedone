@@ -1,5 +1,6 @@
 import UIKit
 
+// MARK: - AddTaskViewControllerDelegate
 protocol AddTaskViewControllerDelegate: AnyObject {
     func didAdd(task: String, note: String?)
     func didEdit(task: ToDoListItem, editedTask: String, editedNote: String?)
@@ -125,7 +126,7 @@ private extension AddTaskViewController {
     
     func updateAppearance(for traitCollection: UITraitCollection) {
         if traitCollection.userInterfaceStyle == .dark {
-            
+            view.backgroundColor = .systemBackground
         } else {
             view.backgroundColor = .systemBackground
         }
