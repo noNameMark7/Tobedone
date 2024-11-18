@@ -32,7 +32,7 @@ class CustomTableViewCell: UITableViewCell {
         return label
     }()
     
-    let isPriorityImageView: UIImageView = {
+    private let isPriorityImageView: UIImageView = {
         let imageView = UIImageView()
         imageView.translatesAutoresizingMaskIntoConstraints = false
         imageView.image = #imageLiteral(resourceName: "Akatsuki Cloud")
@@ -112,21 +112,22 @@ private extension CustomTableViewCell {
 // MARK: - Cell Configuration
 extension CustomTableViewCell {
     
-    func configurationOfValuesWith(_ item: ToDoListItem) {
-        noteLabel.text = item.note
-        isPriorityImageView.isHidden = !item.isPriority
+    func configurationOfValuesWith(_ task: ToDoListItem) {
+        noteLabel.text = task.note
+        isPriorityImageView.isHidden = !task.isPriority
         
-        if item.isDone {
+        if task.isDone {
             let attributedText = NSAttributedString(
-                string: item.name ?? "",
+                string: task.name ?? "",
                 attributes: [
                     .strikethroughStyle: NSUnderlineStyle.single.rawValue,
                     .foregroundColor: UIColor.gray
                 ]
             )
             taskLabel.attributedText = attributedText
+            isPriorityImageView.isHidden = true
         } else {
-            taskLabel.attributedText = NSAttributedString(string: item.name ?? "")
+            taskLabel.attributedText = NSAttributedString(string: task.name ?? "")
         }
     }
 }
