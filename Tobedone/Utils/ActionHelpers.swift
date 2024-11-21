@@ -53,7 +53,7 @@ class ActionHelpers {
         viewModel: MainScreenViewModel,
         in viewController: UIViewController
     ) -> UIContextualAction {
-        let action = UIContextualAction(style: .destructive, title: "Delete") { _, _, completionHandler in
+        let action = UIContextualAction(style: .destructive, title: nil) { _, _, completionHandler in
             presentDeleteConfirmation(in: viewController, for: task, viewModel: viewModel, completion: completionHandler)
         }
         action.backgroundColor = .systemRed
@@ -65,10 +65,10 @@ class ActionHelpers {
         for task: ToDoListItem,
         viewModel: MainScreenViewModel
     ) -> UIContextualAction {
-        let title = task.isPriority ? "Remove priority" : "Priority"
+        //let title = task.isPriority ? "Remove priority" : "Priority"
         let imageName = task.isPriority ? "star.slash" : "star"
         
-        let action = UIContextualAction(style: .normal, title: title) { _, _, completionHandler in
+        let action = UIContextualAction(style: .normal, title: nil) { _, _, completionHandler in
             viewModel.togglePriority(for: task)
             completionHandler(true)
         }
@@ -81,10 +81,10 @@ class ActionHelpers {
         for task: ToDoListItem,
         viewModel: MainScreenViewModel
     ) -> UIContextualAction {
-        let completedTitle = task.isDone ? "Undone" : "Done"
+        //let completedTitle = task.isDone ? "Undone" : "Done"
         let imageName = task.isDone ? "arrow.uturn.left.circle" : "checkmark.circle"
         
-        let action = UIContextualAction(style: .normal, title: completedTitle) { _, _, completionHandler in
+        let action = UIContextualAction(style: .normal, title: nil) { _, _, completionHandler in
             viewModel.toggleCompletion(for: task)
             completionHandler(true)
         }
@@ -99,7 +99,7 @@ class ActionHelpers {
         delegate: AddTaskViewControllerDelegate?,
         transitioningDelegate: UIViewControllerTransitioningDelegate?
     ) -> UIContextualAction {
-        let action = UIContextualAction(style: .normal, title: "Edit") { _, _, completionHandler in
+        let action = UIContextualAction(style: .normal, title: nil) { _, _, completionHandler in
             presentEditTask(
                 in: viewController,
                 task: task,

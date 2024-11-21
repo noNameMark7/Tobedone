@@ -56,10 +56,9 @@ private extension MainScreenViewController {
     
     func updateAppearance(for traitCollection: UITraitCollection) {
         if traitCollection.userInterfaceStyle == .dark {
-            tableView.backgroundColor = #colorLiteral(red: 0, green: 0, blue: 0, alpha: 1)
+            tableView.backgroundColor = #colorLiteral(red: 0.1298420429, green: 0.1298461258, blue: 0.1298439503, alpha: 1)
         } else {
-            tableView.backgroundColor = #colorLiteral(red: 0.9490196078, green: 0.9490196078, blue: 0.9647058824, alpha: 1)
-            
+            tableView.backgroundColor = #colorLiteral(red: 1, green: 0.8323456645, blue: 0.4732058644, alpha: 1)
         }
     }
 }
@@ -75,7 +74,7 @@ extension MainScreenViewController {
         )
         tableView.dataSource = self
         tableView.delegate = self
-        tableView.estimatedRowHeight = 90
+        tableView.estimatedRowHeight = 100
         tableView.rowHeight = UITableView.automaticDimension
     }
     
@@ -94,10 +93,10 @@ extension MainScreenViewController {
         navigationItem.rightBarButtonItem?.tintColor = UIColor(named: "addButtonColorSet")
         
         navigationItem.leftBarButtonItem = UIBarButtonItem(
-            image: UIImage(systemName: "gear"),
+            image: UIImage(systemName: "line.3.horizontal"),
             style: .plain,
             target: self,
-            action: #selector(didTappedSettingsButton)
+            action: #selector(didTappedSideMenuButton)
         )
         navigationItem.leftBarButtonItem?.tintColor = UIColor(named: "addButtonColorSet")
     }
@@ -110,11 +109,9 @@ extension MainScreenViewController {
         present(addTaskVC, animated: true)
     }
     
-    @objc private func didTappedSettingsButton() {
-        let vc = SettingsViewController()
-        let nav = UINavigationController(rootViewController: vc)
-        nav.modalPresentationStyle = .formSheet
-        present(nav, animated: true)
+    @objc private func didTappedSideMenuButton() {
+        let vc = SideMenuViewController()
+        navigationController?.pushViewController(vc, animated: true)
     }
 }
 
@@ -155,7 +152,7 @@ extension MainScreenViewController: UITableViewDataSource, UITableViewDelegate {
         _ tableView: UITableView,
         heightForHeaderInSection section: Int
     ) -> CGFloat {
-        31
+        32
     }
     
     // MARK: - numberOfSections

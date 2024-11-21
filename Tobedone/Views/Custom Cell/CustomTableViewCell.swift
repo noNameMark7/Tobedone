@@ -9,8 +9,6 @@ class CustomTableViewCell: UITableViewCell {
     private let containerView: UIView = {
         let view = UIView()
         view.translatesAutoresizingMaskIntoConstraints = false
-        view.layer.cornerRadius = 9
-        view.clipsToBounds = true
         return view
     }()
 
@@ -74,24 +72,24 @@ private extension CustomTableViewCell {
         containerView.addSubview(isPriorityImageView)
         
         NSLayoutConstraint.activate([
-            containerView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 3),
-            containerView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -6),
-            containerView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -3),
-            containerView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 6),
+            containerView.topAnchor.constraint(equalTo: contentView.topAnchor),
+            containerView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
+            containerView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
+            containerView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
             
-            taskLabel.topAnchor.constraint(equalTo: containerView.topAnchor, constant: 7),
+            taskLabel.topAnchor.constraint(equalTo: containerView.topAnchor, constant: 10),
             taskLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 10),
             
-            noteLabel.topAnchor.constraint(equalTo: taskLabel.bottomAnchor, constant: 5),
+            noteLabel.topAnchor.constraint(equalTo: taskLabel.bottomAnchor, constant: 7),
             noteLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 10),
             noteLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -10),
-            noteLabel.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -7),
+            noteLabel.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -10),
             
-            isPriorityImageView.topAnchor.constraint(equalTo: containerView.topAnchor, constant: 7),
-            isPriorityImageView.leadingAnchor.constraint(equalTo: taskLabel.trailingAnchor, constant: 5),
+            isPriorityImageView.topAnchor.constraint(equalTo: containerView.topAnchor, constant: 10),
+            isPriorityImageView.leadingAnchor.constraint(equalTo: taskLabel.trailingAnchor, constant: 7),
             isPriorityImageView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -10),
-            isPriorityImageView.heightAnchor.constraint(equalToConstant: 15.9),
-            isPriorityImageView.widthAnchor.constraint(equalToConstant: 24)
+            isPriorityImageView.heightAnchor.constraint(equalToConstant: 14.6),
+            isPriorityImageView.widthAnchor.constraint(equalToConstant: 22)
         ])
         
         updateAppearance(for: traitCollection)
@@ -99,11 +97,9 @@ private extension CustomTableViewCell {
     
     func updateAppearance(for traitCollection: UITraitCollection) {
         if traitCollection.userInterfaceStyle == .dark {
-            containerView.backgroundColor = #colorLiteral(red: 0.1298420429, green: 0.1298461258, blue: 0.1298439503, alpha: 1)
-            contentView.backgroundColor = #colorLiteral(red: 0, green: 0, blue: 0, alpha: 1)
+            contentView.backgroundColor = #colorLiteral(red: 0.09698758538, green: 0.0979478585, blue: 0.0979478585, alpha: 1)
         } else {
-            containerView.backgroundColor = #colorLiteral(red: 1, green: 1, blue: 1, alpha: 1)
-            contentView.backgroundColor = #colorLiteral(red: 0.9490196078, green: 0.9490196078, blue: 0.9647058824, alpha: 1)
+            contentView.backgroundColor = #colorLiteral(red: 0.8187154134, green: 0.6849408206, blue: 0.3920946181, alpha: 1)
         }
     }
 }

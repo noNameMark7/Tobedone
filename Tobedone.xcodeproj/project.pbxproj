@@ -9,11 +9,12 @@
 /* Begin PBXBuildFile section */
 		4D2A04D92C87BB7C00C0F9A6 /* ToDoListItem+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D2A04D72C87BB7C00C0F9A6 /* ToDoListItem+CoreDataClass.swift */; };
 		4D2A04DA2C87BB7C00C0F9A6 /* ToDoListItem+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D2A04D82C87BB7C00C0F9A6 /* ToDoListItem+CoreDataProperties.swift */; };
-		4D39F4942C8B896000AB69DE /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D39F4932C8B896000AB69DE /* SettingsViewController.swift */; };
+		4D39F4942C8B896000AB69DE /* SideMenuViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D39F4932C8B896000AB69DE /* SideMenuViewController.swift */; };
 		4D3A1D3A2CA4AB0600D0958F /* SettingsTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D3A1D392CA4AB0500D0958F /* SettingsTableViewCell.swift */; };
 		4D45CD2A2CE3E30000923829 /* MainScreenViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D45CD292CE3E30000923829 /* MainScreenViewModel.swift */; };
 		4D45CD2C2CE3E46B00923829 /* DataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D45CD2B2CE3E46B00923829 /* DataManager.swift */; };
 		4D7279A62CE7AAD300E71294 /* ActionHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D7279A52CE7AAD300E71294 /* ActionHelpers.swift */; };
+		4D8E816F2CEF734900220073 /* AppRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D8E816E2CEF734900220073 /* AppRouter.swift */; };
 		4D961AE22C7BCB9900AED7AF /* CustomTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D961AE12C7BCB9900AED7AF /* CustomTableViewCell.swift */; };
 		4DA60ACD2C82758800CDB41A /* FontManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DA60ACC2C82758800CDB41A /* FontManager.swift */; };
 		4DB580832CD81E7200051BE2 /* CustomSizePresentationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DB580822CD81E7200051BE2 /* CustomSizePresentationController.swift */; };
@@ -32,11 +33,12 @@
 /* Begin PBXFileReference section */
 		4D2A04D72C87BB7C00C0F9A6 /* ToDoListItem+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ToDoListItem+CoreDataClass.swift"; sourceTree = "<group>"; };
 		4D2A04D82C87BB7C00C0F9A6 /* ToDoListItem+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ToDoListItem+CoreDataProperties.swift"; sourceTree = "<group>"; };
-		4D39F4932C8B896000AB69DE /* SettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
+		4D39F4932C8B896000AB69DE /* SideMenuViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SideMenuViewController.swift; sourceTree = "<group>"; };
 		4D3A1D392CA4AB0500D0958F /* SettingsTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsTableViewCell.swift; sourceTree = "<group>"; };
 		4D45CD292CE3E30000923829 /* MainScreenViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainScreenViewModel.swift; sourceTree = "<group>"; };
 		4D45CD2B2CE3E46B00923829 /* DataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataManager.swift; sourceTree = "<group>"; };
 		4D7279A52CE7AAD300E71294 /* ActionHelpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActionHelpers.swift; sourceTree = "<group>"; };
+		4D8E816E2CEF734900220073 /* AppRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppRouter.swift; sourceTree = "<group>"; };
 		4D961AE12C7BCB9900AED7AF /* CustomTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomTableViewCell.swift; sourceTree = "<group>"; };
 		4DA60ACC2C82758800CDB41A /* FontManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FontManager.swift; sourceTree = "<group>"; };
 		4DB580822CD81E7200051BE2 /* CustomSizePresentationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomSizePresentationController.swift; sourceTree = "<group>"; };
@@ -77,11 +79,19 @@
 			isa = PBXGroup;
 			children = (
 				4DCF44C52BC1818800666EB9 /* MainScreenViewController.swift */,
-				4D39F4932C8B896000AB69DE /* SettingsViewController.swift */,
+				4D39F4932C8B896000AB69DE /* SideMenuViewController.swift */,
 				4DFB7F8C2CD03812008D939F /* AddTaskViewController.swift */,
 				4DB580822CD81E7200051BE2 /* CustomSizePresentationController.swift */,
 			);
 			path = Controllers;
+			sourceTree = "<group>";
+		};
+		4D8E816D2CEF732300220073 /* Router */ = {
+			isa = PBXGroup;
+			children = (
+				4D8E816E2CEF734900220073 /* AppRouter.swift */,
+			);
+			path = Router;
 			sourceTree = "<group>";
 		};
 		4D961ADF2C7BCB6A00AED7AF /* Views */ = {
@@ -140,6 +150,7 @@
 		4DCF44C02BC1818800666EB9 /* Tobedone */ = {
 			isa = PBXGroup;
 			children = (
+				4D8E816D2CEF732300220073 /* Router */,
 				4DD5EC542CDBF51300C6D256 /* Supporting files */,
 				4D9B56FF2C7BC77500AA4FC3 /* Core Data */,
 				4DA60ACB2C82756300CDB41A /* Utils */,
@@ -253,6 +264,7 @@
 			files = (
 				4D2A04D92C87BB7C00C0F9A6 /* ToDoListItem+CoreDataClass.swift in Sources */,
 				4D7279A62CE7AAD300E71294 /* ActionHelpers.swift in Sources */,
+				4D8E816F2CEF734900220073 /* AppRouter.swift in Sources */,
 				4DCF44C62BC1818800666EB9 /* MainScreenViewController.swift in Sources */,
 				4DCF44C22BC1818800666EB9 /* AppDelegate.swift in Sources */,
 				4DCF44C42BC1818800666EB9 /* SceneDelegate.swift in Sources */,
@@ -268,7 +280,7 @@
 				4DCF44CC2BC1818800666EB9 /* Tobedone.xcdatamodeld in Sources */,
 				4DB580832CD81E7200051BE2 /* CustomSizePresentationController.swift in Sources */,
 				4D3A1D3A2CA4AB0600D0958F /* SettingsTableViewCell.swift in Sources */,
-				4D39F4942C8B896000AB69DE /* SettingsViewController.swift in Sources */,
+				4D39F4942C8B896000AB69DE /* SideMenuViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
