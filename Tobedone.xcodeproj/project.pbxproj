@@ -9,7 +9,6 @@
 /* Begin PBXBuildFile section */
 		4D2A04D92C87BB7C00C0F9A6 /* ToDoListItem+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D2A04D72C87BB7C00C0F9A6 /* ToDoListItem+CoreDataClass.swift */; };
 		4D2A04DA2C87BB7C00C0F9A6 /* ToDoListItem+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D2A04D82C87BB7C00C0F9A6 /* ToDoListItem+CoreDataProperties.swift */; };
-		4D39F4942C8B896000AB69DE /* SideMenuViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D39F4932C8B896000AB69DE /* SideMenuViewController.swift */; };
 		4D3A1D3A2CA4AB0600D0958F /* SettingsTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D3A1D392CA4AB0500D0958F /* SettingsTableViewCell.swift */; };
 		4D45CD2A2CE3E30000923829 /* MainScreenViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D45CD292CE3E30000923829 /* MainScreenViewModel.swift */; };
 		4D45CD2C2CE3E46B00923829 /* DataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D45CD2B2CE3E46B00923829 /* DataManager.swift */; };
@@ -33,7 +32,6 @@
 /* Begin PBXFileReference section */
 		4D2A04D72C87BB7C00C0F9A6 /* ToDoListItem+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ToDoListItem+CoreDataClass.swift"; sourceTree = "<group>"; };
 		4D2A04D82C87BB7C00C0F9A6 /* ToDoListItem+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ToDoListItem+CoreDataProperties.swift"; sourceTree = "<group>"; };
-		4D39F4932C8B896000AB69DE /* SideMenuViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SideMenuViewController.swift; sourceTree = "<group>"; };
 		4D3A1D392CA4AB0500D0958F /* SettingsTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsTableViewCell.swift; sourceTree = "<group>"; };
 		4D45CD292CE3E30000923829 /* MainScreenViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainScreenViewModel.swift; sourceTree = "<group>"; };
 		4D45CD2B2CE3E46B00923829 /* DataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataManager.swift; sourceTree = "<group>"; };
@@ -79,7 +77,6 @@
 			isa = PBXGroup;
 			children = (
 				4DCF44C52BC1818800666EB9 /* MainScreenViewController.swift */,
-				4D39F4932C8B896000AB69DE /* SideMenuViewController.swift */,
 				4DFB7F8C2CD03812008D939F /* AddTaskViewController.swift */,
 				4DB580822CD81E7200051BE2 /* CustomSizePresentationController.swift */,
 			);
@@ -150,8 +147,8 @@
 		4DCF44C02BC1818800666EB9 /* Tobedone */ = {
 			isa = PBXGroup;
 			children = (
-				4D8E816D2CEF732300220073 /* Router */,
 				4DD5EC542CDBF51300C6D256 /* Supporting files */,
+				4D8E816D2CEF732300220073 /* Router */,
 				4D9B56FF2C7BC77500AA4FC3 /* Core Data */,
 				4DA60ACB2C82756300CDB41A /* Utils */,
 				4DE59BAF2CD4337C005FFB61 /* Model */,
@@ -280,7 +277,6 @@
 				4DCF44CC2BC1818800666EB9 /* Tobedone.xcdatamodeld in Sources */,
 				4DB580832CD81E7200051BE2 /* CustomSizePresentationController.swift in Sources */,
 				4D3A1D3A2CA4AB0600D0958F /* SettingsTableViewCell.swift in Sources */,
-				4D39F4942C8B896000AB69DE /* SideMenuViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

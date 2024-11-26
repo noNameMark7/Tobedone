@@ -33,8 +33,8 @@ class CustomTableViewCell: UITableViewCell {
     private let isPriorityImageView: UIImageView = {
         let imageView = UIImageView()
         imageView.translatesAutoresizingMaskIntoConstraints = false
-        imageView.image = #imageLiteral(resourceName: "Akatsuki Cloud")
-        imageView.isHidden = true
+        imageView.image = UIImage(named: "no_priority")
+        imageView.isHidden = false
         return imageView
     }()
     
@@ -78,18 +78,18 @@ private extension CustomTableViewCell {
             containerView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
             
             taskLabel.topAnchor.constraint(equalTo: containerView.topAnchor, constant: 10),
-            taskLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 10),
+            taskLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 16),
             
             noteLabel.topAnchor.constraint(equalTo: taskLabel.bottomAnchor, constant: 7),
-            noteLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 10),
+            noteLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 16),
             noteLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -10),
             noteLabel.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -10),
             
-            isPriorityImageView.topAnchor.constraint(equalTo: containerView.topAnchor, constant: 10),
+            isPriorityImageView.centerYAnchor.constraint(equalTo: taskLabel.centerYAnchor),
             isPriorityImageView.leadingAnchor.constraint(equalTo: taskLabel.trailingAnchor, constant: 7),
-            isPriorityImageView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -10),
-            isPriorityImageView.heightAnchor.constraint(equalToConstant: 14.6),
-            isPriorityImageView.widthAnchor.constraint(equalToConstant: 22)
+            isPriorityImageView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -16),
+            isPriorityImageView.heightAnchor.constraint(equalToConstant: 23),
+            isPriorityImageView.widthAnchor.constraint(equalToConstant: 23)
         ])
         
         updateAppearance(for: traitCollection)
@@ -99,7 +99,7 @@ private extension CustomTableViewCell {
         if traitCollection.userInterfaceStyle == .dark {
             contentView.backgroundColor = #colorLiteral(red: 0.09698758538, green: 0.0979478585, blue: 0.0979478585, alpha: 1)
         } else {
-            contentView.backgroundColor = #colorLiteral(red: 0.8187154134, green: 0.6849408206, blue: 0.3920946181, alpha: 1)
+            contentView.backgroundColor = #colorLiteral(red: 0.921431005, green: 0.9214526415, blue: 0.9214410186, alpha: 1)
         }
     }
 }
@@ -110,7 +110,6 @@ extension CustomTableViewCell {
     
     func configurationOfValuesWith(_ task: ToDoListItem) {
         noteLabel.text = task.note
-        isPriorityImageView.isHidden = !task.isPriority
         
         if task.isDone {
             let attributedText = NSAttributedString(
@@ -124,6 +123,17 @@ extension CustomTableViewCell {
             isPriorityImageView.isHidden = true
         } else {
             taskLabel.attributedText = NSAttributedString(string: task.name ?? "")
+            isPriorityImageView.isHidden = false
+            
+            let imageName = task.isPriority ? "priority" : "no_priority"
+            
+            UIView.transition(
+                with: isPriorityImageView,
+                duration: 0.3,
+                options: .transitionCrossDissolve
+            ) {
+                self.isPriorityImageView.image = UIImage(named: imageName)
+            }
         }
     }
 }

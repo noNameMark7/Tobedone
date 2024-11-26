@@ -4,6 +4,7 @@ class MainScreenViewController: UIViewController {
     
     // MARK: - Properties
     private let viewModel = MainScreenViewModel()
+    private var sideMenuIsOpened = false
     
     // MARK: - UI Components
     private let tableView: UITableView = {
@@ -11,6 +12,23 @@ class MainScreenViewController: UIViewController {
         tableView.translatesAutoresizingMaskIntoConstraints = false
         tableView.separatorStyle = .none
         return tableView
+    }()
+    
+    private lazy var sideMenuView: UIView = {
+        let view = UITableView()
+        view.translatesAutoresizingMaskIntoConstraints = false
+        view.backgroundColor = #colorLiteral(red: 0.1215627306, green: 0.1251553095, blue: 0.1435456147, alpha: 1)
+        return view
+    }()
+    
+    private lazy var dimmingView: UIView = {
+        let view = UITableView()
+        view.translatesAutoresizingMaskIntoConstraints = false
+        view.backgroundColor = #colorLiteral(red: 0, green: 0, blue: 0, alpha: 1).withAlphaComponent(0.8)
+        view.alpha = 0
+        let gesture = UITapGestureRecognizer(target: self, action: #selector(didTapOutsideMenu))
+        view.addGestureRecognizer(gesture)
+        return view
     }()
     
     // MARK: - Lifecycle
@@ -46,11 +64,11 @@ private extension MainScreenViewController {
         configureUI()
         tableViewSetup()
         navigationSetup()
+        sideMenuSetup()
     }
     
     func configureUI() {
         view.addSubview(tableView)
-        
         updateAppearance(for: traitCollection)
     }
     
@@ -58,7 +76,7 @@ private extension MainScreenViewController {
         if traitCollection.userInterfaceStyle == .dark {
             tableView.backgroundColor = #colorLiteral(red: 0.1298420429, green: 0.1298461258, blue: 0.1298439503, alpha: 1)
         } else {
-            tableView.backgroundColor = #colorLiteral(red: 1, green: 0.8323456645, blue: 0.4732058644, alpha: 1)
+            tableView.backgroundColor = .systemBackground
         }
     }
 }
@@ -79,16 +97,16 @@ extension MainScreenViewController {
     }
     
     func navigationSetup() {
-        title = "to be done"
+        title = "#Tobedone"
         
-        navigationController?.navigationBar.prefersLargeTitles = true
+        navigationController?.navigationBar.prefersLargeTitles = false
         navigationController?.navigationBar.largeTitleTextAttributes = FontManager.shared.navigationBarTitleAttributes(large: true)
         navigationController?.navigationBar.titleTextAttributes = FontManager.shared.navigationBarTitleAttributes()
         
         navigationItem.rightBarButtonItem = UIBarButtonItem(
             barButtonSystemItem: .add,
             target: self,
-            action: #selector(didTappedAddTaskButton)
+            action: #selector(didTapAddNewTaskButton)
         )
         navigationItem.rightBarButtonItem?.tintColor = UIColor(named: "addButtonColorSet")
         
@@ -96,22 +114,9 @@ extension MainScreenViewController {
             image: UIImage(systemName: "line.3.horizontal"),
             style: .plain,
             target: self,
-            action: #selector(didTappedSideMenuButton)
+            action: #selector(didTapSideMenuButton)
         )
         navigationItem.leftBarButtonItem?.tintColor = UIColor(named: "addButtonColorSet")
-    }
-    
-    @objc private func didTappedAddTaskButton() {
-        let addTaskVC = AddTaskViewController()
-        addTaskVC.delegate = self
-        addTaskVC.modalPresentationStyle = .custom
-        addTaskVC.transitioningDelegate = self
-        present(addTaskVC, animated: true)
-    }
-    
-    @objc private func didTappedSideMenuButton() {
-        let vc = SideMenuViewController()
-        navigationController?.pushViewController(vc, animated: true)
     }
 }
 
@@ -152,7 +157,7 @@ extension MainScreenViewController: UITableViewDataSource, UITableViewDelegate {
         _ tableView: UITableView,
         heightForHeaderInSection section: Int
     ) -> CGFloat {
-        32
+        28
     }
     
     // MARK: - numberOfSections
@@ -197,6 +202,7 @@ extension MainScreenViewController: UITableViewDataSource, UITableViewDelegate {
         leadingSwipeActionsConfigurationForRowAt indexPath: IndexPath
     ) -> UISwipeActionsConfiguration? {
         let task = viewModel.taskForIndexPath(indexPath)
+        
         let completeAction = ActionHelpers.createCompleteAction(
             for: task,
             viewModel: viewModel
@@ -220,6 +226,7 @@ extension MainScreenViewController: UITableViewDataSource, UITableViewDelegate {
         trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath
     ) -> UISwipeActionsConfiguration? {
         let task = viewModel.taskForIndexPath(indexPath)
+        
         let deleteAction = ActionHelpers.createDeleteAction(
             for: task,
             viewModel: viewModel,
@@ -316,5 +323,61 @@ extension MainScreenViewController: AddTaskViewControllerDelegate {
             newName: editedTask,
             newNote: newNote
         )
+    }
+}
+
+
+// MARK: - Actions
+private extension MainScreenViewController {
+    
+    @objc func didTapAddNewTaskButton() {
+        AppRouter.shared.addNewTask(
+            in: self,
+            delegate: self,
+            transitioningDelegate: self
+        )
+    }
+    
+    @objc func didTapSideMenuButton() {
+        toggleSideMenu()
+    }
+}
+
+// MARK: - Side menu logic
+private extension MainScreenViewController {
+    
+    func sideMenuSetup() {
+        view.addSubview(dimmingView)
+        view.addSubview(sideMenuView)
+        
+        NSLayoutConstraint.activate([
+            dimmingView.topAnchor.constraint(equalTo: view.topAnchor),
+            dimmingView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            dimmingView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+            dimmingView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            
+            sideMenuView.topAnchor.constraint(equalTo: view.topAnchor),
+            sideMenuView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+            sideMenuView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: -SIDE_MENU_WIDTH),
+            sideMenuView.widthAnchor.constraint(equalToConstant: SIDE_MENU_WIDTH)
+        ])
+    }
+    
+    @objc func didTapOutsideMenu() {
+        if (sideMenuIsOpened) {
+            toggleSideMenu()
+        }
+    }
+    
+    func toggleSideMenu() {
+        sideMenuIsOpened.toggle()
+        
+        let sideMenuViewLeading = sideMenuIsOpened ? 0 : -SIDE_MENU_WIDTH
+        let dimmingAlpha = sideMenuIsOpened ? 1 : 0
+        
+        UIView.animate(withDuration: 0.3) {
+            self.sideMenuView.transform = CGAffineTransform(translationX: sideMenuViewLeading + SIDE_MENU_WIDTH, y: 0)
+            self.dimmingView.alpha = CGFloat(dimmingAlpha)
+        }
     }
 }

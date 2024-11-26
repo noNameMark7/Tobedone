@@ -65,7 +65,6 @@ class ActionHelpers {
         for task: ToDoListItem,
         viewModel: MainScreenViewModel
     ) -> UIContextualAction {
-        //let title = task.isPriority ? "Remove priority" : "Priority"
         let imageName = task.isPriority ? "star.slash" : "star"
         
         let action = UIContextualAction(style: .normal, title: nil) { _, _, completionHandler in

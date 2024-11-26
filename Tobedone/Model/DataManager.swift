@@ -22,8 +22,20 @@ final class DataManager {
         
         do {
             let allTasks = try context.fetch(fetchRequest)
-            activeTasks = allTasks.filter { !$0.isDone }
+            
+            activeTasks = allTasks
+                .filter { !$0.isDone }
+                .sorted { firstTask, secondTask in
+                    if firstTask.isPriority && !secondTask.isPriority {
+                        return true
+                    } else if !firstTask.isPriority && secondTask.isPriority {
+                        return false
+                    }
+                    return firstTask.position < secondTask.position
+                }
+            
             completedTasks = allTasks.filter { $0.isDone }
+            
             completion()
         } catch {
             fatalError("Failed to fetch tasks: \(error)")
@@ -60,6 +72,12 @@ final class DataManager {
     // MARK: - Toggle priority
     func togglePriority(for task: ToDoListItem) {
         task.isPriority.toggle()
+        // Only update position if the task is still active (not completed)
+        if !task.isDone {
+            if let index = activeTasks.firstIndex(of: task) {
+                activeTasks[index].position = Int16(index) // Update position
+            }
+        }
         saveChanges()
     }
     

@@ -20,7 +20,7 @@ class HeaderView: UIView {
         configuration.contentInsets = NSDirectionalEdgeInsets(top: 7, leading: 7, bottom: 7, trailing: 7)
         
         button.configuration = configuration
-        button.titleLabel?.font = FontManager.shared.labelFont(withSize: 14, withWeight: .bold)
+        //button.titleLabel?.font = FontManager.shared.labelFont(withSize: 22, withWeight: .bold)
         button.setTitleColor(.black, for: .normal)
         button.addTarget(self, action: #selector(didTappedButton), for: .touchUpInside)
         button.translatesAutoresizingMaskIntoConstraints = false
@@ -35,7 +35,7 @@ class HeaderView: UIView {
         NSLayoutConstraint.activate([
             sectionsButtonView.topAnchor.constraint(equalTo: self.topAnchor),
             sectionsButtonView.bottomAnchor.constraint(equalTo: self.bottomAnchor),
-            sectionsButtonView.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 16),
+            sectionsButtonView.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 18),
             sectionsButtonView.trailingAnchor.constraint(lessThanOrEqualTo: self.trailingAnchor, constant: -8)
         ])
         
