@@ -34,8 +34,15 @@ final class DataManager {
                     return firstTask.position < secondTask.position
                 }
             
-            completedTasks = allTasks.filter { $0.isDone }
+            for (index, task) in activeTasks.enumerated() {
+                task.position = Int16(index)
+            }
             
+            completedTasks = allTasks
+                .filter { $0.isDone }
+                .sorted { ($0.completionDate ?? Date.distantPast) > ($1.completionDate ?? Date.distantPast) }
+            
+            saveChanges()
             completion()
         } catch {
             fatalError("Failed to fetch tasks: \(error)")
@@ -47,6 +54,7 @@ final class DataManager {
         let newItem = ToDoListItem(context: context)
         newItem.name = name
         newItem.note = note
+        newItem.position = Int16(activeTasks.count)
         saveChanges()
     }
     
@@ -66,6 +74,7 @@ final class DataManager {
     // MARK: - Toggle completion
     func toggleCompletion(for task: ToDoListItem) {
         task.isDone.toggle()
+        task.completionDate = task.isDone ? Date() : nil
         saveChanges()
     }
     

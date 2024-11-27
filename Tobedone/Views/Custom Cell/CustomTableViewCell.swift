@@ -6,12 +6,6 @@ class CustomTableViewCell: UITableViewCell {
     static let identifier = "CustomTableViewCell"
     
     // MARK: - UI Components
-    private let containerView: UIView = {
-        let view = UIView()
-        view.translatesAutoresizingMaskIntoConstraints = false
-        return view
-    }()
-
     private let taskLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -38,22 +32,17 @@ class CustomTableViewCell: UITableViewCell {
         return imageView
     }()
     
-    // MARK: - Lifecycle
     override init(
         style: UITableViewCell.CellStyle,
         reuseIdentifier: String?
     ) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
+        contentView.backgroundColor = UIColor(named: "AnyDarkAppearance")
         initialSetup()
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
-    }
-    
-    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
-        super.traitCollectionDidChange(previousTraitCollection)
-        updateAppearance(for: traitCollection)
     }
 }
 
@@ -66,41 +55,25 @@ private extension CustomTableViewCell {
     }
     
     func configureUI() {
-        contentView.addSubview(containerView)
-        containerView.addSubview(taskLabel)
-        containerView.addSubview(noteLabel)
-        containerView.addSubview(isPriorityImageView)
+        contentView.addSubview(taskLabel)
+        contentView.addSubview(noteLabel)
+        contentView.addSubview(isPriorityImageView)
         
         NSLayoutConstraint.activate([
-            containerView.topAnchor.constraint(equalTo: contentView.topAnchor),
-            containerView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
-            containerView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
-            containerView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
-            
-            taskLabel.topAnchor.constraint(equalTo: containerView.topAnchor, constant: 10),
-            taskLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 16),
+            taskLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 10),
+            taskLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
             
             noteLabel.topAnchor.constraint(equalTo: taskLabel.bottomAnchor, constant: 7),
-            noteLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 16),
-            noteLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -10),
-            noteLabel.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -10),
+            noteLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
+            noteLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -10),
+            noteLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -10),
             
-            isPriorityImageView.centerYAnchor.constraint(equalTo: taskLabel.centerYAnchor),
+            isPriorityImageView.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
             isPriorityImageView.leadingAnchor.constraint(equalTo: taskLabel.trailingAnchor, constant: 7),
-            isPriorityImageView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -16),
+            isPriorityImageView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
             isPriorityImageView.heightAnchor.constraint(equalToConstant: 23),
             isPriorityImageView.widthAnchor.constraint(equalToConstant: 23)
         ])
-        
-        updateAppearance(for: traitCollection)
-    }
-    
-    func updateAppearance(for traitCollection: UITraitCollection) {
-        if traitCollection.userInterfaceStyle == .dark {
-            contentView.backgroundColor = #colorLiteral(red: 0.09698758538, green: 0.0979478585, blue: 0.0979478585, alpha: 1)
-        } else {
-            contentView.backgroundColor = #colorLiteral(red: 0.921431005, green: 0.9214526415, blue: 0.9214410186, alpha: 1)
-        }
     }
 }
 

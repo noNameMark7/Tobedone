@@ -51,6 +51,21 @@ class MainScreenViewModel {
     // MARK: - Toggle Priority
     func togglePriority(for task: ToDoListItem) {
         dataManager.togglePriority(for: task)
+        
+        dataManager.activeTasks
+            .sort { firstTask, secondTask in
+                if firstTask.isPriority && !secondTask.isPriority {
+                    return true
+                } else if !firstTask.isPriority && secondTask.isPriority {
+                    return false
+                }
+                return firstTask.position < secondTask.position
+            }
+        
+        for (index, task) in dataManager.activeTasks.enumerated() {
+            task.position = Int16(index)
+        }
+        
         fetchTasks()
     }
     

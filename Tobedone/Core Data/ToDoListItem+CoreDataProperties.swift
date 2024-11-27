@@ -13,7 +13,8 @@ extension ToDoListItem {
     @NSManaged public var note: String?
     @NSManaged public var position: Int16
     @NSManaged public var isDone: Bool
-
+    @NSManaged public var completionDate: Date?
+    
 }
 
 extension ToDoListItem : Identifiable {}
