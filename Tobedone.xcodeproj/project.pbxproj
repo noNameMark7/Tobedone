@@ -128,6 +128,31 @@
 			path = Utils;
 			sourceTree = "<group>";
 		};
+		4DBF9DB42D02551D00D8E290 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				4DBF9DB62D02554100D8E290 /* Storyboard */,
+				4DBF9DB52D02552B00D8E290 /* Assets */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
+		4DBF9DB52D02552B00D8E290 /* Assets */ = {
+			isa = PBXGroup;
+			children = (
+				4DCF44CD2BC1818B00666EB9 /* Assets.xcassets */,
+			);
+			path = Assets;
+			sourceTree = "<group>";
+		};
+		4DBF9DB62D02554100D8E290 /* Storyboard */ = {
+			isa = PBXGroup;
+			children = (
+				4DCF44CF2BC1818B00666EB9 /* LaunchScreen.storyboard */,
+			);
+			path = Storyboard;
+			sourceTree = "<group>";
+		};
 		4DCF44B52BC1818700666EB9 = {
 			isa = PBXGroup;
 			children = (
@@ -147,6 +172,7 @@
 		4DCF44C02BC1818800666EB9 /* Tobedone */ = {
 			isa = PBXGroup;
 			children = (
+				4DBF9DB42D02551D00D8E290 /* Resources */,
 				4DD5EC542CDBF51300C6D256 /* Supporting files */,
 				4D8E816D2CEF732300220073 /* Router */,
 				4D9B56FF2C7BC77500AA4FC3 /* Core Data */,
@@ -165,8 +191,6 @@
 			children = (
 				4DCF44C12BC1818800666EB9 /* AppDelegate.swift */,
 				4DCF44C32BC1818800666EB9 /* SceneDelegate.swift */,
-				4DCF44CD2BC1818B00666EB9 /* Assets.xcassets */,
-				4DCF44CF2BC1818B00666EB9 /* LaunchScreen.storyboard */,
 				4DCF44D22BC1818B00666EB9 /* Info.plist */,
 			);
 			name = "Supporting files";

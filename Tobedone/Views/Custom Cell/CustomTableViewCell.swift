@@ -61,18 +61,18 @@ private extension CustomTableViewCell {
         
         NSLayoutConstraint.activate([
             taskLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 10),
-            taskLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
+            taskLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 12),
             
             noteLabel.topAnchor.constraint(equalTo: taskLabel.bottomAnchor, constant: 7),
-            noteLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
-            noteLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -10),
+            noteLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 12),
+            noteLabel.trailingAnchor.constraint(equalTo: isPriorityImageView.leadingAnchor, constant: 7),
             noteLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -10),
             
-            isPriorityImageView.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
+            isPriorityImageView.centerYAnchor.constraint(equalTo: taskLabel.centerYAnchor),
             isPriorityImageView.leadingAnchor.constraint(equalTo: taskLabel.trailingAnchor, constant: 7),
-            isPriorityImageView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
-            isPriorityImageView.heightAnchor.constraint(equalToConstant: 23),
-            isPriorityImageView.widthAnchor.constraint(equalToConstant: 23)
+            isPriorityImageView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -12),
+            isPriorityImageView.heightAnchor.constraint(equalToConstant: 22),
+            isPriorityImageView.widthAnchor.constraint(equalToConstant: 22)
         ])
     }
 }

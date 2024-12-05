@@ -343,6 +343,7 @@ private extension MainScreenViewController {
     }
 }
 
+
 // MARK: - Side menu logic
 private extension MainScreenViewController {
     
